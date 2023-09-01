@@ -1,0 +1,62 @@
+/**
+ * Sample React Native App
+ * https://github.com/facebook/react-native
+ *
+ * @format
+ */
+
+import React from 'react';
+import type {PropsWithChildren} from 'react';
+import {SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, useColorScheme, View} from 'react-native';
+
+import {
+  Colors,
+  DebugInstructions,
+  Header,
+  LearnMoreLinks,
+  ReloadInstructions,
+} from 'react-native/Libraries/NewAppScreen';
+
+function FlexBoxTest(): JSX.Element {
+  return (
+    <View style={{display: 'flex', flexDirection: 'column', backgroundColor: 'darkgray', marginTop: 20, height: 500}}>
+      <View style={{width: 100, backgroundColor: 'darkcyan', margin: 5, flex: 1}}>
+        <Text style={{fontSize: 20}}>1</Text>
+      </View>
+      <View style={{width: 100, backgroundColor: 'darkcyan', margin: 5, flex: 1}}>
+        <Text>2</Text>
+      </View>
+      <View style={{width: 100, backgroundColor: 'darkcyan', margin: 5, flex: 1}}>
+        <Text>3</Text>
+      </View>
+      <View style={{width: 100, backgroundColor: 'darkcyan', margin: 5, flex: 1}}>
+        <Text>4</Text>
+      </View>
+    </View>
+  );
+}
+
+function App(): JSX.Element {
+  return <FlexBoxTest />;
+}
+
+const styles = StyleSheet.create({
+  sectionContainer: {
+    marginTop: 32,
+    paddingHorizontal: 24,
+  },
+  sectionTitle: {
+    fontSize: 24,
+    fontWeight: '600',
+  },
+  sectionDescription: {
+    marginTop: 8,
+    fontSize: 18,
+    fontWeight: '400',
+  },
+  highlight: {
+    fontWeight: '700',
+  },
+});
+
+export default App;
