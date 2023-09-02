@@ -8,6 +8,7 @@
 import React from 'react';
 import type {PropsWithChildren} from 'react';
 import {SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, useColorScheme, View} from 'react-native';
+import Icons from 'react-native-vector-icons/Ionicons';
 
 import {
   Colors,
@@ -30,7 +31,9 @@ function FlexBoxTest(): JSX.Element {
         <Text>3</Text>
       </View>
       <View style={{width: 100, backgroundColor: 'darkcyan', margin: 5, flex: 1}}>
-        <Text>4</Text>
+        <Text>矢量图标</Text>
+        <Icons name="accessibility" size={50} style={{color: 'red'}} />
+        <Icons name="american-football" size={50} style={{color: 'blue'}} />
       </View>
     </View>
   );
