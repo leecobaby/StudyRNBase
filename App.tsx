@@ -6,9 +6,9 @@
  */
 
 import React from 'react';
-import type {PropsWithChildren} from 'react';
 import {SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, useColorScheme, View} from 'react-native';
 import Icons from 'react-native-vector-icons/Ionicons';
+import {NavigationContainer} from '@react-navigation/native';
 
 import {
   Colors,
@@ -40,7 +40,11 @@ function FlexBoxTest(): JSX.Element {
 }
 
 function App(): JSX.Element {
-  return <FlexBoxTest />;
+  return (
+    <NavigationContainer>
+      <FlexBoxTest />
+    </NavigationContainer>
+  );
 }
 
 const styles = StyleSheet.create({
