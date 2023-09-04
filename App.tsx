@@ -9,7 +9,6 @@ import React from 'react';
 import {SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, useColorScheme, View} from 'react-native';
 import Icons from 'react-native-vector-icons/Ionicons';
 import {NavigationContainer} from '@react-navigation/native';
-
 import {
   Colors,
   DebugInstructions,
@@ -17,6 +16,9 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import 'react-native-gesture-handler';
+
+import {AppNavigators} from './navigators/AppNavigators';
 
 function FlexBoxTest(): JSX.Element {
   return (
@@ -42,7 +44,7 @@ function FlexBoxTest(): JSX.Element {
 function App(): JSX.Element {
   return (
     <NavigationContainer>
-      <FlexBoxTest />
+      <AppNavigators />
     </NavigationContainer>
   );
 }
