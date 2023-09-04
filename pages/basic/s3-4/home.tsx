@@ -10,7 +10,7 @@ export const Home: React.FC<Props> = props => {
   return (
     <View style={{flex: 1, backgroundColor: 'lightgray', paddingTop: 30}}>
       <Text style={styles.text}>Welcome to home page</Text>
-      <Button title="Go to page1" onPress={() => navigation.navigate('Page1')} />
+      <Button title="Go to page1" onPress={() => navigation.navigate('Page1', {name: '动态的'})} />
       <Button title="Go to page2 " onPress={() => navigation.navigate('Page2')} />
       <Button title="Go to page3" onPress={() => navigation.navigate('Page3')} />
     </View>

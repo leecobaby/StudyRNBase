@@ -1,12 +1,19 @@
-import React from 'react';
+import React, {useEffect, useLayoutEffect} from 'react';
 import {Button, StyleSheet, Text, View} from 'react-native';
 
-interface Props {
-  navigation: any;
-}
+import {RootStackParamList, ScreenProps} from '@/navigators/type';
 
-export const Page1: React.FC<Props> = props => {
-  const {navigation} = props;
+interface Props extends ScreenProps<'Page1'> {}
+
+export const Page1: React.FC<Props> = ({route, navigation}) => {
+  const {name} = route.params || {};
+
+  useEffect(() => {
+    navigation.setOptions({
+      title: `Page1 ${name ?? ''}`,
+    });
+  }, [navigation, name]);
+
   return (
     <View style={{flex: 1, backgroundColor: 'lightgray', paddingTop: 30}}>
       <Text style={styles.text}>Welcome to Page1</Text>
