@@ -4,18 +4,26 @@ import Icons from 'react-native-vector-icons/Ionicons';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import {
+  createDrawerNavigator,
+  DrawerContentComponentProps,
+  DrawerContentScrollView,
+  DrawerItemList,
+} from '@react-navigation/drawer';
 
-import {Page1} from '../pages/basic/s3/page1';
-import {Page2} from '../pages/basic/s3/page2';
-import {Page3} from '../pages/basic/s3/page3';
-import {Login} from '../pages/basic/s3/login';
-import {Home} from '../pages/basic/s3/home';
-import {RootStackParamList} from './type';
 import {useAuth} from '@/hooks/use-auth';
+import {Page1} from '@/pages/basic/s3/page1';
+import {Page2} from '@/pages/basic/s3/page2';
+import {Page3} from '@/pages/basic/s3/page3';
+import {Login} from '@/pages/basic/s3/login';
+import {Home} from '@/pages/basic/s3/home';
+import {Drawer} from '@/pages/basic/s3/Drawer';
+import {DrawerParamList, RootStackParamList} from './type';
 
 const Stack = createStackNavigator<RootStackParamList>();
 const BottonTab = createBottomTabNavigator<RootStackParamList>();
 const MaterialTopTab = createMaterialTopTabNavigator<RootStackParamList>();
+const DrawerNav = createDrawerNavigator<DrawerParamList>();
 
 export const AppNavigators: React.FC = () => {
   const {isLogin} = useAuth();
@@ -25,13 +33,13 @@ export const AppNavigators: React.FC = () => {
       <Stack.Screen name="Home" component={Home} />
       {isLogin ? (
         <>
+          <Stack.Screen name="Drawer" component={DrawerNavigators} options={{title: '抽屉导航器'}} />
           <Stack.Screen name="Top" component={MaterialTopTabNavigators} options={{title: '顶部导航器'}} />
           <Stack.Screen
             name="Bottom"
             component={BottonTabNavigators}
             options={{title: '底部导航器', header: () => null}}
           />
-          <Stack.Screen name="Page3" component={Page3} />
         </>
       ) : (
         <Stack.Screen name="Login" component={Login} />
@@ -97,5 +105,25 @@ const MaterialTopTabNavigators: React.FC = () => {
       <MaterialTopTab.Screen name="Page2" component={Page2} />
       <MaterialTopTab.Screen name="Page3" component={Page3} />
     </MaterialTopTab.Navigator>
+  );
+};
+
+const DrawerNavigators: React.FC = () => {
+  return (
+    <DrawerNav.Navigator drawerContent={props => DrawerView(props)} screenOptions={{drawerActiveTintColor: 'white'}}>
+      <DrawerNav.Screen
+        name="DrawerPage"
+        component={Drawer}
+        options={{drawerIcon: props => TabBarIcon({...props, name: 'journal'})}}
+      />
+    </DrawerNav.Navigator>
+  );
+};
+
+const DrawerView: React.FC<DrawerContentComponentProps> = props => {
+  return (
+    <DrawerContentScrollView {...props} style={{backgroundColor: '#982300'}}>
+      <DrawerItemList {...props} />
+    </DrawerContentScrollView>
   );
 };

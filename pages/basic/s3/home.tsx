@@ -12,7 +12,7 @@ export const Home: React.FC<Props> = props => {
       <Text style={styles.text}>Welcome to home page</Text>
       <Button title="Go to top" onPress={() => navigation.navigate('Top')} />
       <Button title="Go to bottom " onPress={() => navigation.navigate('Bottom')} />
-      <Button title="Go to login" onPress={() => navigation.navigate('Login')} />
+      <Button title="Go to drawer" onPress={() => navigation.navigate('Drawer')} />
     </View>
   );
 };

@@ -1,12 +1,13 @@
 import React from 'react';
 import {Button, StyleSheet, Text, View} from 'react-native';
 
-interface Props {
-  navigation: any;
-}
+import {ScreenProps} from '@/navigators/type';
+
+type Props = ScreenProps<'Page2'>;
 
 export const Page2: React.FC<Props> = props => {
   const {navigation} = props;
+
   return (
     <View style={{flex: 1, backgroundColor: 'lightgray', paddingTop: 30}}>
       <Text style={styles.text}>Welcome to Page2</Text>
