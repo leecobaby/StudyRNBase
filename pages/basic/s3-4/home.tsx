@@ -1,17 +1,17 @@
 import React from 'react';
 import {Button, StyleSheet, Text, View} from 'react-native';
 
-interface Props {
-  navigation: any;
-}
+import {ScreenProps} from '@/navigators/type';
+
+type Props = ScreenProps<'Home'>;
 
 export const Home: React.FC<Props> = props => {
   const {navigation} = props;
   return (
     <View style={{flex: 1, backgroundColor: 'lightgray', paddingTop: 30}}>
       <Text style={styles.text}>Welcome to home page</Text>
-      <Button title="Go to page1" onPress={() => navigation.navigate('Page1', {name: '动态的'})} />
-      <Button title="Go to page2 " onPress={() => navigation.navigate('Page2')} />
+      <Button title="Go to top" onPress={() => navigation.navigate('Top')} />
+      <Button title="Go to bottom " onPress={() => navigation.navigate('Bottom')} />
       <Button title="Go to page3" onPress={() => navigation.navigate('Page3')} />
     </View>
   );

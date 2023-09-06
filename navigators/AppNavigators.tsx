@@ -1,7 +1,8 @@
 import React from 'react';
+import Icons from 'react-native-vector-icons/Ionicons';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import Icons from 'react-native-vector-icons/Ionicons';
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 
 import {Page1} from '../pages/basic/s3-4/page1';
 import {Page2} from '../pages/basic/s3-4/page2';
@@ -12,6 +13,18 @@ import {Text} from 'react-native';
 
 const Stack = createStackNavigator<RootStackParamList>();
 const BottonTab = createBottomTabNavigator<RootStackParamList>();
+const MaterialTopTab = createMaterialTopTabNavigator<RootStackParamList>();
+
+export const AppNavigators: React.FC = () => {
+  return (
+    <Stack.Navigator initialRouteName="Home">
+      <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen name="Top" component={MaterialTopTabNavigators} options={{title: '顶部导航器'}} />
+      <Stack.Screen name="Bottom" component={BottonTabNavigators} options={{title: '底部导航器', header: () => null}} />
+      <Stack.Screen name="Page3" component={Page3} />
+    </Stack.Navigator>
+  );
+};
 
 const BottonTabNavigators: React.FC = () => {
   return (
@@ -43,17 +56,6 @@ const BottonTabNavigators: React.FC = () => {
   );
 };
 
-export const AppNavigators: React.FC = () => {
-  return (
-    <Stack.Navigator initialRouteName="Tab">
-      <Stack.Screen name="Tab" component={BottonTabNavigators} options={{title: '底部导航', headerRight: () => null}} />
-      <Stack.Screen name="Page1" component={Page1} />
-      <Stack.Screen name="Page2" component={Page2} options={{header: () => null}} />
-      <Stack.Screen name="Page3" component={Page3} />
-    </Stack.Navigator>
-  );
-};
-
 const TabBarIcon: React.FC<{focused: boolean; color: string; size: number; name: string}> = ({
   focused,
   color,
@@ -65,4 +67,21 @@ const TabBarIcon: React.FC<{focused: boolean; color: string; size: number; name:
 
 const TabBarLabel: React.FC<{focused: boolean; color: string; title: string}> = ({focused, color, title}) => {
   return <Text style={{color: focused ? color : undefined}}>{title}</Text>;
+};
+
+const MaterialTopTabNavigators: React.FC = () => {
+  return (
+    <MaterialTopTab.Navigator
+      initialRouteName="Home"
+      screenOptions={{
+        tabBarStyle: {minWidth: 50, backgroundColor: '#879'},
+        tabBarLabelStyle: {textTransform: 'capitalize', color: 'white', fontSize: 18, fontWeight: 'bold', margin: 0},
+        tabBarIndicatorStyle: {height: 2, backgroundColor: 'white'},
+      }}>
+      <MaterialTopTab.Screen name="Home" component={Home} />
+      <MaterialTopTab.Screen name="Page1" component={Page1} />
+      <MaterialTopTab.Screen name="Page2" component={Page2} />
+      <MaterialTopTab.Screen name="Page3" component={Page3} />
+    </MaterialTopTab.Navigator>
+  );
 };

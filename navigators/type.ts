@@ -5,7 +5,8 @@ export type RootStackParamList = {
   Page1: {name?: string} | undefined;
   Page2: undefined;
   Page3: {name?: string; mode: string} | undefined;
-  Tab?: undefined;
+  Top: undefined;
+  Bottom: undefined;
 };
 
 export type ScreenProps<T extends keyof RootStackParamList> = StackScreenProps<RootStackParamList, T>;
