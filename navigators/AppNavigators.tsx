@@ -1,27 +1,41 @@
 import React from 'react';
+import {Text} from 'react-native';
 import Icons from 'react-native-vector-icons/Ionicons';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 
-import {Page1} from '../pages/basic/s3-4/page1';
-import {Page2} from '../pages/basic/s3-4/page2';
-import {Page3} from '../pages/basic/s3-4/page3';
-import {Home} from '../pages/basic/s3-4/home';
+import {Page1} from '../pages/basic/s3/page1';
+import {Page2} from '../pages/basic/s3/page2';
+import {Page3} from '../pages/basic/s3/page3';
+import {Login} from '../pages/basic/s3/login';
+import {Home} from '../pages/basic/s3/home';
 import {RootStackParamList} from './type';
-import {Text} from 'react-native';
+import {useAuth} from '@/hooks/use-auth';
 
 const Stack = createStackNavigator<RootStackParamList>();
 const BottonTab = createBottomTabNavigator<RootStackParamList>();
 const MaterialTopTab = createMaterialTopTabNavigator<RootStackParamList>();
 
 export const AppNavigators: React.FC = () => {
+  const {isLogin} = useAuth();
+
   return (
-    <Stack.Navigator initialRouteName="Home">
+    <Stack.Navigator initialRouteName="Login">
       <Stack.Screen name="Home" component={Home} />
-      <Stack.Screen name="Top" component={MaterialTopTabNavigators} options={{title: '顶部导航器'}} />
-      <Stack.Screen name="Bottom" component={BottonTabNavigators} options={{title: '底部导航器', header: () => null}} />
-      <Stack.Screen name="Page3" component={Page3} />
+      {isLogin ? (
+        <>
+          <Stack.Screen name="Top" component={MaterialTopTabNavigators} options={{title: '顶部导航器'}} />
+          <Stack.Screen
+            name="Bottom"
+            component={BottonTabNavigators}
+            options={{title: '底部导航器', header: () => null}}
+          />
+          <Stack.Screen name="Page3" component={Page3} />
+        </>
+      ) : (
+        <Stack.Screen name="Login" component={Login} />
+      )}
     </Stack.Navigator>
   );
 };

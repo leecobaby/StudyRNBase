@@ -1,18 +1,25 @@
 import React from 'react';
 import {Button, StyleSheet, Text, View} from 'react-native';
 
+import {useAuth} from '@/hooks/use-auth';
 import {ScreenProps} from '@/navigators/type';
 
-type Props = ScreenProps<'Home'>;
+type Props = ScreenProps<'Login'>;
 
-export const Home: React.FC<Props> = props => {
+export const Login: React.FC<Props> = props => {
   const {navigation} = props;
+  const {setIsLogin} = useAuth();
+
   return (
     <View style={{flex: 1, backgroundColor: 'lightgray', paddingTop: 30}}>
-      <Text style={styles.text}>Welcome to home page</Text>
-      <Button title="Go to top" onPress={() => navigation.navigate('Top')} />
-      <Button title="Go to bottom " onPress={() => navigation.navigate('Bottom')} />
-      <Button title="Go to page3" onPress={() => navigation.navigate('Page3')} />
+      <Text style={styles.text}>Login</Text>
+      <Button
+        title="登录"
+        onPress={() => {
+          setIsLogin(true);
+          navigation.navigate('Home');
+        }}
+      />
     </View>
   );
 };

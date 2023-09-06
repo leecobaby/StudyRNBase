@@ -18,6 +18,7 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 import 'react-native-gesture-handler';
 
+import {AuthContextProvider} from './hooks/use-auth';
 import {AppNavigators} from './navigators/AppNavigators';
 
 function FlexBoxTest(): JSX.Element {
@@ -43,9 +44,11 @@ function FlexBoxTest(): JSX.Element {
 
 function App(): JSX.Element {
   return (
-    <NavigationContainer>
-      <AppNavigators />
-    </NavigationContainer>
+    <AuthContextProvider>
+      <NavigationContainer>
+        <AppNavigators />
+      </NavigationContainer>
+    </AuthContextProvider>
   );
 }
 
