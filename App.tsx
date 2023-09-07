@@ -12,7 +12,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import 'react-native-gesture-handler';
 
 import {AuthContextProvider} from './hooks/use-auth';
-import {AppNavigators} from './navigators/AppNavigators';
+import {AppNavigators, NativeStackNavigators} from './navigators/AppNavigators';
 
 function FlexBoxTest(): JSX.Element {
   return (
@@ -39,7 +39,8 @@ function App(): JSX.Element {
   return (
     <AuthContextProvider>
       <NavigationContainer>
-        <AppNavigators />
+        {/* <AppNavigators /> */}
+        <NativeStackNavigators />
       </NavigationContainer>
     </AuthContextProvider>
   );

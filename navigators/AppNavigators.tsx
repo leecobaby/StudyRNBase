@@ -3,6 +3,7 @@ import {Text} from 'react-native';
 import Icons from 'react-native-vector-icons/Ionicons';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {
   createDrawerNavigator,
@@ -21,9 +22,20 @@ import {Drawer} from '@/pages/basic/s3/Drawer';
 import {DrawerParamList, RootStackParamList} from './type';
 
 const Stack = createStackNavigator<RootStackParamList>();
+const NativeStack = createNativeStackNavigator<RootStackParamList>();
 const BottonTab = createBottomTabNavigator<RootStackParamList>();
 const MaterialTopTab = createMaterialTopTabNavigator<RootStackParamList>();
 const DrawerNav = createDrawerNavigator<DrawerParamList>();
+
+export const NativeStackNavigators: React.FC = () => {
+  return (
+    <NativeStack.Navigator>
+      <NativeStack.Screen name="Page1" component={Page1} />
+      <NativeStack.Screen name="Page2" component={Page2} />
+      <NativeStack.Screen name="Page3" component={Page3} />
+    </NativeStack.Navigator>
+  );
+};
 
 export const AppNavigators: React.FC = () => {
   const {isLogin} = useAuth();
