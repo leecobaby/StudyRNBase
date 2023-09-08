@@ -13,12 +13,12 @@ import {
 } from '@react-navigation/drawer';
 
 import {useAuth} from '@/hooks/use-auth';
-import {Page1} from '@/pages/basic/s3/page1';
-import {Page2} from '@/pages/basic/s3/page2';
-import {Page3} from '@/pages/basic/s3/page3';
-import {Login} from '@/pages/basic/s3/login';
-import {Home} from '@/pages/basic/s3/home';
-import {Drawer} from '@/pages/basic/s3/Drawer';
+import {Page1} from '@/js/pages/basic/s3/page1';
+import {Page2} from '@/js/pages/basic/s3/page2';
+import {Page3} from '@/js/pages/basic/s3/page3';
+import {Login} from '@/js/pages/basic/s3/login';
+import {Home} from '@/js/pages/basic/s3/home';
+import {Drawer} from '@/js/pages/basic/s3/Drawer';
 import {DrawerParamList, RootStackParamList} from './type';
 
 const Stack = createStackNavigator<RootStackParamList>();
