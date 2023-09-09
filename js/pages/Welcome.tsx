@@ -10,9 +10,8 @@ export const WelcomePage: React.FC<Props> = ({navigation, route}) => {
   const {setIsShow} = useWelcome();
   useEffect(() => {
     const timer = setTimeout(() => {
-      console.log('This will run after 1 second!');
       setIsShow(false);
-      navigation.navigate('HomePage');
+      // navigation.navigate('Main');
     }, 2000);
     return () => clearTimeout(timer);
   }, [navigation, setIsShow]);

@@ -9,6 +9,7 @@ module.exports = {
     'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': 'off',
     'react-native/no-inline-styles': 0,
+    'react/no-unstable-nested-components': 0,
     'prettier/prettier': [
       'error',
       {

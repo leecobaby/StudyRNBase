@@ -1,6 +1,7 @@
 import React from 'react';
 import {Text} from 'react-native';
-import Icons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -15,7 +16,11 @@ import {
 import {useWelcome} from '@/js/hooks/use-welcome';
 import {WelcomePage} from '@/js/pages/Welcome';
 import {HomePage} from '@/js/pages/Home';
+import {PopularPage} from '@/js/pages/Popular';
 import {DrawerParamList, RootStackParamList} from './type';
+import {TrendingPage} from '@/js/pages/Trending';
+import {FavoritePage} from '../pages/Favorite';
+import {MyPage} from '../pages/Me';
 
 const Stack = createStackNavigator<RootStackParamList>();
 const NativeStack = createNativeStackNavigator<RootStackParamList>();
@@ -33,8 +38,27 @@ const InitNavigator: React.FC = () => {
 
 const MainNavigator: React.FC = () => {
   return (
-    <BottonTab.Navigator>
-      <BottonTab.Screen name="PopularPage" component={HomePage} options={{header: () => null}} />
+    <BottonTab.Navigator screenOptions={{tabBarLabelStyle: {fontSize: 16}, header: () => null}}>
+      <BottonTab.Screen
+        name="PopularPage"
+        component={PopularPage}
+        options={{tabBarLabel: '最热', tabBarIcon: () => <MaterialIcons name="whatshot" size={26} />}}
+      />
+      <BottonTab.Screen
+        name="TrendingPage"
+        component={TrendingPage}
+        options={{tabBarLabel: '趋势', tabBarIcon: () => <MaterialIcons name="trending-up" size={26} />}}
+      />
+      <BottonTab.Screen
+        name="FavoritePage"
+        component={FavoritePage}
+        options={{tabBarLabel: '收藏', tabBarIcon: () => <MaterialIcons name="favorite" size={26} />}}
+      />
+      <BottonTab.Screen
+        name="MyPage"
+        component={MyPage}
+        options={{tabBarLabel: '我的', tabBarIcon: () => <AntDesign name="user" size={26} />}}
+      />
     </BottonTab.Navigator>
   );
 };

@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 
-export const Popular: React.FC = () => {
+export const TrendingPage: React.FC = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Trending Page</Text>
