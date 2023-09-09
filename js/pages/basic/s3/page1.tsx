@@ -1,7 +1,7 @@
 import React, {useEffect, useLayoutEffect} from 'react';
 import {Button, StyleSheet, Text, View} from 'react-native';
 
-import {ScreenProps} from '@/navigators/type';
+import {ScreenProps} from '@/js/navigators/type';
 
 interface Props extends ScreenProps<'Page1'> {}
 

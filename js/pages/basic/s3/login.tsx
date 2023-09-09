@@ -1,8 +1,8 @@
 import React from 'react';
 import {Button, StyleSheet, Text, View} from 'react-native';
 
-import {useAuth} from '@/hooks/use-auth';
-import {ScreenProps} from '@/navigators/type';
+import {useAuth} from '@/js/hooks/use-auth';
+import {ScreenProps} from '@/js/navigators/type';
 
 type Props = ScreenProps<'Login'>;
 

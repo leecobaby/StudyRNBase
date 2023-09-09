@@ -1,4 +1,4 @@
-import {ScreenProps} from '@/navigators/type';
+import {ScreenProps} from '@/js/navigators/type';
 import React, {useCallback, useEffect} from 'react';
 import {Alert, Button, StyleSheet, Text, TextInput, View} from 'react-native';
 

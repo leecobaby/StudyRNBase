@@ -9,17 +9,16 @@ import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import 'react-native-gesture-handler';
 
-import {AuthContextProvider} from './hooks/use-auth';
-import {AppNavigators, NativeStackNavigators} from './navigators/AppNavigators';
+import {AppNavigators} from './js/navigators/AppNavigators';
+import {WelcomeContextProvider} from './js/hooks/use-welcome';
 
 function App(): JSX.Element {
   return (
-    <AuthContextProvider>
+    <WelcomeContextProvider>
       <NavigationContainer>
-        {/* <AppNavigators /> */}
-        <NativeStackNavigators />
+        <AppNavigators />
       </NavigationContainer>
-    </AuthContextProvider>
+    </WelcomeContextProvider>
   );
 }
 

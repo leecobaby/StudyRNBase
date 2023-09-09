@@ -12,7 +12,7 @@ import {
   DrawerItemList,
 } from '@react-navigation/drawer';
 
-import {useAuth} from '@/hooks/use-auth';
+import {useAuth} from '@/js/hooks/use-auth';
 import {Page1} from '@/js/pages/basic/s3/page1';
 import {Page2} from '@/js/pages/basic/s3/page2';
 import {Page3} from '@/js/pages/basic/s3/page3';
