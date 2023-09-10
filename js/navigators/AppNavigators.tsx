@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Text} from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -17,10 +17,11 @@ import {useWelcome} from '@/js/hooks/use-welcome';
 import {WelcomePage} from '@/js/pages/Welcome';
 import {HomePage} from '@/js/pages/Home';
 import {PopularPage} from '@/js/pages/Popular';
-import {DrawerParamList, RootStackParamList} from './type';
+import {DrawerParamList, RootStackParamList, ScreenProps} from './type';
 import {TrendingPage} from '@/js/pages/Trending';
 import {FavoritePage} from '../pages/Favorite';
 import {MyPage} from '../pages/Me';
+import {useNavigation} from '@react-navigation/native';
 
 const Stack = createStackNavigator<RootStackParamList>();
 const NativeStack = createNativeStackNavigator<RootStackParamList>();
@@ -36,28 +37,45 @@ const InitNavigator: React.FC = () => {
   );
 };
 
-const MainNavigator: React.FC = () => {
+type MainNavigatorProps = ScreenProps<'Main'>;
+const MainNavigator: React.FC<MainNavigatorProps> = ({navigation}) => {
+  const {theme} = navigation.getState().routes.at(0)?.params || {};
+
   return (
-    <BottonTab.Navigator screenOptions={{tabBarLabelStyle: {fontSize: 16}, header: () => null}}>
+    <BottonTab.Navigator
+      screenOptions={{
+        tabBarLabelStyle: {fontSize: 16},
+        header: () => null,
+        tabBarActiveTintColor: theme?.color,
+      }}>
       <BottonTab.Screen
         name="PopularPage"
         component={PopularPage}
-        options={{tabBarLabel: '最热', tabBarIcon: () => <MaterialIcons name="whatshot" size={26} />}}
+        options={{
+          tabBarLabel: '最热',
+          tabBarIcon: ({color}) => <MaterialIcons name="whatshot" size={26} color={color} />,
+        }}
       />
       <BottonTab.Screen
         name="TrendingPage"
         component={TrendingPage}
-        options={{tabBarLabel: '趋势', tabBarIcon: () => <MaterialIcons name="trending-up" size={26} />}}
+        options={{
+          tabBarLabel: '趋势',
+          tabBarIcon: ({color}) => <MaterialIcons name="trending-up" size={26} color={color} />,
+        }}
       />
       <BottonTab.Screen
         name="FavoritePage"
         component={FavoritePage}
-        options={{tabBarLabel: '收藏', tabBarIcon: () => <MaterialIcons name="favorite" size={26} />}}
+        options={{
+          tabBarLabel: '收藏',
+          tabBarIcon: ({color}) => <MaterialIcons name="favorite" size={26} color={color} />,
+        }}
       />
       <BottonTab.Screen
         name="MyPage"
         component={MyPage}
-        options={{tabBarLabel: '我的', tabBarIcon: () => <AntDesign name="user" size={26} />}}
+        options={{tabBarLabel: '我的', tabBarIcon: ({color}) => <AntDesign name="user" size={26} color={color} />}}
       />
     </BottonTab.Navigator>
   );
@@ -75,49 +93,6 @@ export const AppNavigators: React.FC = () => {
     </Stack.Navigator>
   );
 };
-
-// const BottonTabNavigators: React.FC = () => {
-//   return (
-//     <BottonTab.Navigator
-//       initialRouteName="Home"
-//       screenOptions={{
-//         header: () => null,
-//         tabBarActiveTintColor: 'red',
-//       }}>
-//       <BottonTab.Screen
-//         name="Home"
-//         component={Home}
-//         options={{
-//           tabBarLabel: props => TabBarLabel({...props, title: '首页'}),
-//           tabBarIcon: props => TabBarIcon({...props, name: 'home'}),
-//         }}
-//       />
-//       <BottonTab.Screen
-//         name="Page1"
-//         component={Page1}
-//         options={{
-//           tabBarLabel: props => TabBarLabel({...props, title: '我的', color: 'orange'}),
-//           tabBarIcon: props => TabBarIcon({...props, name: 'people', color: 'orange'}),
-//         }}
-//       />
-//       <BottonTab.Screen name="Page2" component={Page2} />
-//       <BottonTab.Screen name="Page3" component={Page3} />
-//     </BottonTab.Navigator>
-//   );
-// };
-
-// const TabBarIcon: React.FC<{focused: boolean; color: string; size: number; name: string}> = ({
-//   focused,
-//   color,
-//   size,
-//   name,
-// }) => {
-//   return <Icons name={name} size={size} color={focused ? color : undefined} />;
-// };
-
-// const TabBarLabel: React.FC<{focused: boolean; color: string; title: string}> = ({focused, color, title}) => {
-//   return <Text style={{color: focused ? color : undefined}}>{title}</Text>;
-// };
 
 // const MaterialTopTabNavigators: React.FC = () => {
 //   return (

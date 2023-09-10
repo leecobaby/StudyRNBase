@@ -5,7 +5,7 @@ import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 import {MaterialTopTabBarProps, MaterialTopTabScreenProps} from '@react-navigation/material-top-tabs';
 
 export type RootStackParamList = {
-  Main: undefined;
+  Main: {theme: {color: string}} | undefined;
   Init: undefined;
   WelcomePage: undefined;
   HomePage: undefined;
