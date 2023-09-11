@@ -1,7 +1,7 @@
-import {FavoritePage} from '../pages/Favorite';
-import {MyPage} from '../pages/Me';
-import {PopularPage} from '../pages/Popular';
-import {TrendingPage} from '../pages/Trending';
+import {MyPage} from '@/pages/Me';
+import {PopularPage} from '@/pages/Popular';
+import {FavoritePage} from '@/pages/Favorite';
+import {TrendingPage} from '@/pages/Trending';
 
 const tabs = [
   {name: 'Popular', component: PopularPage},

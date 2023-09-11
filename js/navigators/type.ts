@@ -1,18 +1,16 @@
 import type {StackScreenProps} from '@react-navigation/stack';
-import type {CompositeScreenProps} from '@react-navigation/native';
 import {DrawerScreenProps} from '@react-navigation/drawer';
-import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
-import {MaterialTopTabBarProps, MaterialTopTabScreenProps} from '@react-navigation/material-top-tabs';
 
 export type RootStackParamList = {
-  Main: {theme: {color: string}} | undefined;
   Init: undefined;
+  Main: {theme: {color: string}} | undefined;
   WelcomePage: undefined;
-  HomePage: undefined;
+  Home: undefined;
   PopularPage: undefined;
   TrendingPage: undefined;
   FavoritePage: undefined;
   MyPage: undefined;
+  Detail: undefined;
 };
 
 export type DrawerParamList = {

@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Text, StyleSheet, Button} from 'react-native';
-import {ScreenProps, RootStackParamList} from '../navigators/type';
-import {useNavigation} from '@react-navigation/native';
+
+import {ScreenProps} from '@/navigators/type';
 
 type Props = ScreenProps<'TrendingPage'>;
 

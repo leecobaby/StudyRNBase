@@ -1,12 +1,12 @@
 import React, {useEffect} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
-import type {ScreenProps} from '@/js/navigators/type';
-import {useWelcome} from '@/js/hooks/use-welcome';
+import {useWelcome} from '@/hooks/use-welcome';
+import type {ScreenProps} from '@/navigators/type';
 
 type Props = ScreenProps<'WelcomePage'>;
 
-export const WelcomePage: React.FC<Props> = ({navigation, route}) => {
+export const WelcomePage: React.FC<Props> = ({navigation}) => {
   const {setIsShow} = useWelcome();
   useEffect(() => {
     const timer = setTimeout(() => {

@@ -1,6 +1,7 @@
 import React from 'react';
 import {View, Text, StyleSheet, Button} from 'react-native';
-import {ScreenProps} from '../navigators/type';
+
+import {ScreenProps} from '@/navigators/type';
 
 type Props = ScreenProps<'FavoritePage'>;
 export const FavoritePage: React.FC<Props> = ({navigation}) => {
