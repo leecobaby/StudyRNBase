@@ -4,9 +4,9 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-import {FavoritePage} from './Favorite';
 import {MyPage} from './Me';
 import {PopularPage} from './Popular';
+import {FavoritePage} from './Favorite';
 import {TrendingPage} from './Trending';
 import {RootStackParamList, ScreenProps} from '@/navigators/type';
 
