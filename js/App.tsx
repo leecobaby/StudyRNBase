@@ -1,18 +1,11 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
 import React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
 import {Provider} from 'react-redux';
 import 'react-native-gesture-handler';
 
+import {store} from './store';
 import {AppNavigators} from './navigators/AppNavigators';
 import {WelcomeContextProvider} from './hooks/use-welcome';
-import {store} from './store';
+import {NavigationContainer} from './navigators/NavigationContainer';
 
 function App(): JSX.Element {
   return (

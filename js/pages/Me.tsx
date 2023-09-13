@@ -9,7 +9,7 @@ export const MyPage: React.FC<Props> = ({navigation}) => {
     <View style={styles.container}>
       <Text style={styles.text}>My Page</Text>
       <Button
-        title="修改主题"
+        title="修改颜色"
         onPress={() => {
           navigation.getParent()?.setParams({theme: {color: 'blue'}});
         }}

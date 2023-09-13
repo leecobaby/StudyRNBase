@@ -9,7 +9,7 @@ export const FavoritePage: React.FC<Props> = ({navigation}) => {
     <View style={styles.container}>
       <Text style={styles.text}>Favorite Page</Text>
       <Button
-        title="修改主题"
+        title="修改颜色"
         onPress={() => {
           navigation.getParent()?.setParams({theme: {color: 'green'}});
         }}

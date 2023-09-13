@@ -10,7 +10,7 @@ export const TrendingPage: React.FC<Props> = ({navigation}) => {
     <View style={styles.container}>
       <Text style={styles.text}>Trending Page</Text>
       <Button
-        title="修改主题"
+        title="修改颜色"
         onPress={() => {
           navigation.getParent()?.setParams({theme: {color: 'red'}});
         }}
