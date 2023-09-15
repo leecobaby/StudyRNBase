@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ScreenProps} from '@/navigators/type';
 import {useAppDispatch} from '@/hooks/store';
 import {toggleTheme} from '@/store/themeSlice';
+import {fetchData} from '@/dao/DataStore';
 
 const KEY = 'save_key';
 type Props = ScreenProps<'Detail'>;
@@ -13,9 +14,10 @@ export const Detail: React.FC<Props> = ({navigation}) => {
   const [value, setValue] = useState('');
   const [data, setData] = useState([]);
   const [storage, setStorage] = useState('');
+  const [optdata, setOptdata] = useState('');
+  const url = `https://api.github.com/search/repositories?q=${encodeURIComponent(value)}`;
 
   const loadData = () => {
-    const url = `https://api.github.com/search/repositories?q=${value}`;
     fetch(url)
       .then(response => {
         if (response.ok) {
@@ -45,6 +47,16 @@ export const Detail: React.FC<Props> = ({navigation}) => {
     AsyncStorage.removeItem(KEY).catch(e => console.log(e.toString()));
   };
 
+  const doGetData = () => {
+    fetchData<any>(url)
+      .then(res => {
+        setOptdata(`初次数据加载时间：${new Date(res.timestamp)}\n${JSON.stringify(res.data)}`);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.text}>Detail Page</Text>
@@ -61,6 +73,12 @@ export const Detail: React.FC<Props> = ({navigation}) => {
         <Text onPress={() => doRemove()}>删除</Text>
       </View>
       <Text>{storage}</Text>
+
+      <Text style={styles.text}>离线缓存</Text>
+      <View style={styles.storageAction}>
+        <Text onPress={() => doGetData()}>获取</Text>
+      </View>
+      <Text>{optdata}</Text>
     </ScrollView>
   );
 };

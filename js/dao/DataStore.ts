@@ -19,46 +19,41 @@ async function saveCachedData<T>(url: string, data: T): Promise<void> {
   }
 }
 
-async function fethcCachedData<T>(url: string): Promise<T | null> {
-  try {
-    const cachedData = await AsyncStorage.getItem(url);
-    if (cachedData !== null) {
-      const {data, timestamp} = JSON.parse(cachedData) as CachedData<T>;
-      if (Date.now() - timestamp < CACHE_EXPIRATION_TIME) {
-        return data;
-      }
-    }
-    return null;
-  } catch (error) {
-    console.error(`Failed to get cached data for ${url}: ${error}`);
-    return null;
-  }
-}
-
-async function fetchNetData<T>(url: string): Promise<T | null> {
-  try {
-    const response = await fetch(url);
-    if (response.ok) {
-      const data = await response.json();
-      return data;
-    }
-    throw new Error('Network response was not ok.');
-  } catch (error) {
-    console.error(`Failed to fetch network data for ${url}: ${error}`);
-    return null;
-  }
-}
-
-export async function fetchData<T>(url: string): Promise<T | null> {
-  const cachedData = await fethcCachedData<T>(url);
+async function fetchCachedData<T>(url: string): Promise<CachedData<T> | null> {
+  const cachedData = await AsyncStorage.getItem(url);
   if (cachedData !== null) {
-    return cachedData;
-  }
-  const netData = await fetchNetData<T>(url);
-  if (netData !== null) {
-    // 此处省略 await 加快执行效率，但可能会有隐患
-    saveCachedData(url, netData);
-    return netData;
+    const {data, timestamp} = JSON.parse(cachedData);
+    if (Date.now() - timestamp < CACHE_EXPIRATION_TIME) {
+      return {data, timestamp};
+    }
   }
   return null;
+}
+
+async function fetchNetData<T>(url: string): Promise<T> {
+  const response = await fetch(url);
+  if (response.ok) {
+    const data = (await response.json()) as T;
+    return data;
+  }
+  throw new Error('Network response was not ok.');
+}
+
+export async function fetchData<T>(url: string): Promise<CachedData<T>> {
+  try {
+    const cachedData = await fetchCachedData<T>(url);
+    if (cachedData !== null) {
+      return cachedData;
+    }
+
+    const netData = await fetchNetData<T>(url);
+    if (netData !== null) {
+      saveCachedData(url, netData);
+      return {data: netData, timestamp: Date.now()};
+    }
+
+    throw new Error(`Failed to fetch data for ${url}`);
+  } catch (error) {
+    throw error;
+  }
 }
