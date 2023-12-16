@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const CACHE_EXPIRATION_TIME = 60 * 60 * 1000; // 缓存过期时间为1小时
 
-interface CachedData<T> {
+export interface CachedData<T> {
   data: T;
   timestamp: number;
 }
@@ -48,6 +48,7 @@ export async function fetchData<T>(url: string): Promise<CachedData<T>> {
 
     const netData = await fetchNetData<T>(url);
     if (netData !== null) {
+      // 这里不加await，加快执行效率，但可能存在隐患
       saveCachedData(url, netData);
       return {data: netData, timestamp: Date.now()};
     }

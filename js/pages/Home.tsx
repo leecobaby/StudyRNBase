@@ -10,20 +10,20 @@ import {FavoritePage} from './Favorite';
 import {TrendingPage} from './Trending';
 import {RootStackParamList, ScreenProps} from '@/navigators/type';
 
-const BottonTab = createBottomTabNavigator<RootStackParamList>();
+const BottomTab = createBottomTabNavigator<RootStackParamList>();
 
 type HomeNavigatorProps = ScreenProps<'Home'>;
 export const Home: React.FC<HomeNavigatorProps> = ({navigation}) => {
   const {theme} = navigation.getState().routes.at(0)?.params || {};
 
   return (
-    <BottonTab.Navigator
+    <BottomTab.Navigator
       screenOptions={{
         tabBarLabelStyle: {fontSize: 16},
         header: () => null,
         tabBarActiveTintColor: theme?.color,
       }}>
-      <BottonTab.Screen
+      <BottomTab.Screen
         name="PopularPage"
         component={PopularPage}
         options={{
@@ -31,7 +31,7 @@ export const Home: React.FC<HomeNavigatorProps> = ({navigation}) => {
           tabBarIcon: ({color}) => <MaterialIcons name="whatshot" size={26} color={color} />,
         }}
       />
-      <BottonTab.Screen
+      <BottomTab.Screen
         name="TrendingPage"
         component={TrendingPage}
         options={{
@@ -39,7 +39,7 @@ export const Home: React.FC<HomeNavigatorProps> = ({navigation}) => {
           tabBarIcon: ({color}) => <MaterialIcons name="trending-up" size={26} color={color} />,
         }}
       />
-      <BottonTab.Screen
+      <BottomTab.Screen
         name="FavoritePage"
         component={FavoritePage}
         options={{
@@ -47,12 +47,12 @@ export const Home: React.FC<HomeNavigatorProps> = ({navigation}) => {
           tabBarIcon: ({color}) => <MaterialIcons name="favorite" size={26} color={color} />,
         }}
       />
-      <BottonTab.Screen
+      <BottomTab.Screen
         name="MyPage"
         component={MyPage}
         options={{tabBarLabel: '我的', tabBarIcon: ({color}) => <AntDesign name="user" size={26} color={color} />}}
       />
-    </BottonTab.Navigator>
+    </BottomTab.Navigator>
   );
 };
 
