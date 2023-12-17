@@ -1,17 +1,17 @@
-import {PayloadAction, createAsyncThunk, createSlice} from '@reduxjs/toolkit';
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import {RootState} from './index';
 import {CachedData, fetchData} from '@/dao/DataStore';
 
 interface State {
   [key: string]: {
     loading: boolean;
-    items: [] | null;
+    items: [{id: number}?] | null;
     error?: string;
   };
 }
 
 const initialState: State = {
-  java: {
+  Java: {
     loading: false,
     items: null,
   },
@@ -25,18 +25,18 @@ const popularSlice = createSlice({
     builder
       .addCase(fetchPopularData.pending, (state, action) => {
         const key = action.meta.arg.key;
-        if (!state[key]) return;
+        state[key] = state[key] || {};
         state[key].loading = true;
       })
       .addCase(fetchPopularData.fulfilled, (state, action) => {
         const key = action.meta.arg.key;
-        if (!state[key]) return;
+        state[key] = state[key] || {};
         state[key].loading = false;
         state[key].items = action.payload.data.items;
       })
       .addCase(fetchPopularData.rejected, (state, action) => {
         const key = action.meta.arg.key;
-        if (!state[key]) return;
+        state[key] = state[key] || {};
         state[key].loading = false;
         state[key].error = action.error.message;
       });

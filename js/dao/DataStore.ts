@@ -42,6 +42,7 @@ async function fetchNetData<T>(url: string): Promise<T> {
 export async function fetchData<T>(url: string): Promise<CachedData<T>> {
   try {
     const cachedData = await fetchCachedData<T>(url);
+
     if (cachedData !== null) {
       return cachedData;
     }
