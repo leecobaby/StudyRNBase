@@ -1,6 +1,7 @@
 import React from 'react';
 import {Provider} from 'react-redux';
 import 'react-native-gesture-handler';
+import {ToastProvider} from 'react-native-toast-notifications';
 
 import {store} from './store';
 import {AppNavigators} from './navigators/AppNavigators';
@@ -12,7 +13,9 @@ function App(): JSX.Element {
     <Provider store={store}>
       <WelcomeContextProvider>
         <NavigationContainer>
-          <AppNavigators />
+          <ToastProvider>
+            <AppNavigators />
+          </ToastProvider>
         </NavigationContainer>
       </WelcomeContextProvider>
     </Provider>

@@ -2,10 +2,12 @@ import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import {RootState} from './index';
 import {CachedData, fetchData} from '@/dao/DataStore';
 
+type Items = GitHubRepo[] | null;
+
 interface State {
   [key: string]: {
     loading: boolean;
-    items: [{id: number}?] | null;
+    items: Items;
     error?: string;
   };
 }
@@ -43,10 +45,10 @@ const popularSlice = createSlice({
   },
 });
 
-export const fetchPopularData = createAsyncThunk<CachedData<{items: []}>, {url: string; key: string}>(
+export const fetchPopularData = createAsyncThunk<CachedData<GitHubSearchResult>, {url: string; key: string}>(
   'popular/fetchPopularData',
   arg => {
-    return fetchData<{items: []}>(arg.url);
+    return fetchData<GitHubSearchResult>(arg.url);
   },
 );
 

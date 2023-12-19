@@ -1,22 +1,16 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
-import {Link, RouteProp, useNavigation, useRoute} from '@react-navigation/native';
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-import {useAppDispatch, useAppSelector} from '@/hooks/store';
-import {fetchPopularData, selectPopular} from '@/store/popularSlice';
-import {FlatList} from 'react-native-gesture-handler';
-import {Icon} from 'react-native-vector-icons/Icon';
 type Props = {
-  item?: {owner?: {avatar_url: string; login: string}};
+  item?: GitHubRepo;
   onSelect: () => void;
 };
 
 export const PopularItem: React.FC<Props> = ({item, onSelect}) => {
   if (!item || !item.owner) return null;
 
-  let favoriteButton = (
+  const FavoriteButton = (
     <TouchableOpacity style={{padding: 6}} onPress={() => {}}>
       <FontAwesome name={'star-o'} size={26} style={{color: 'red'}} />
     </TouchableOpacity>
@@ -28,7 +22,7 @@ export const PopularItem: React.FC<Props> = ({item, onSelect}) => {
         <Text style={stlyes.title}>{item.full_name}</Text>
         <Text style={stlyes.description}>{item.description}</Text>
         <View style={stlyes.row}>
-          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <Text>Author:</Text>
             <Image style={{width: 22, height: 22}} source={{uri: item.owner.avatar_url}} />
           </View>
@@ -36,6 +30,7 @@ export const PopularItem: React.FC<Props> = ({item, onSelect}) => {
             <Text>Stars:</Text>
             <Text>{item.stargazers_count}</Text>
           </View>
+          {FavoriteButton}
         </View>
       </View>
     </TouchableOpacity>

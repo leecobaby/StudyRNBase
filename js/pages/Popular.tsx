@@ -1,6 +1,7 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {View, Text, StyleSheet, RefreshControl} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
+import {useToast} from 'react-native-toast-notifications';
 import {Link, RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 
@@ -39,22 +40,51 @@ const reanderItem = (item: any) => {
   return <PopularItem item={item} onSelect={() => {}} />;
 };
 
+const pageSizes = 10;
+
 export const PopularTabPage: React.FC<{route: any}> = ({route}) => {
   const navigation = useNavigation();
+  const toast = useToast();
   const dispatch = useAppDispatch();
   const popular = useAppSelector(selectPopular);
   const popularData = popular[route.name];
-  const items = popularData?.items;
+  const allItems = popularData?.items;
   const key = route.name || '';
   const url = genFetchUrl(key);
+  const [pageIndex, setPageIndex] = useState(1);
+  const [items, setItems] = useState(allItems?.slice(0, pageIndex * pageSizes));
   const loadData = () => {
     dispatch(fetchPopularData({key, url}));
   };
 
+  const loadMore = () => {
+    if (!allItems) return;
+    if (allItems.length > pageIndex * pageSizes) {
+      setItems(allItems?.slice(0, pageIndex * pageSizes));
+    } else {
+      toast.show('没有更多数据了', {
+        duration: 1000,
+        placement: 'center',
+        animationType: 'zoom-in',
+      });
+    }
+  };
+
   useEffect(() => {
     loadData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    setItems(allItems?.slice(0, pageIndex * pageSizes));
+  }, [allItems]);
+
+  useEffect(() => {
+    loadMore();
+  }, [pageIndex]);
+
+  const handleEndReached = () => {
+    setPageIndex(pageIndex + 1);
+  };
 
   return popularData?.loading || !items ? (
     <View style={styles.container}>
@@ -62,7 +92,6 @@ export const PopularTabPage: React.FC<{route: any}> = ({route}) => {
     </View>
   ) : (
     <View style={styles.container}>
-      <Text style={styles.text}>Name1: {key}</Text>
       <FlatList
         data={items}
         renderItem={({item}) => reanderItem(item)}
@@ -77,6 +106,8 @@ export const PopularTabPage: React.FC<{route: any}> = ({route}) => {
             onRefresh={() => loadData()}
           />
         }
+        onEndReached={handleEndReached}
+        onEndReachedThreshold={0.1}
       />
     </View>
   );
