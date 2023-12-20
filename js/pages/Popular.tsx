@@ -6,6 +6,7 @@ import {Link, RouteProp, useNavigation, useRoute} from '@react-navigation/native
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 
 import {PopularItem} from '@/components/PopularItem';
+import {NavigationBar} from '@/components/NavigationBar';
 import {useAppDispatch, useAppSelector} from '@/hooks/store';
 import {fetchPopularData, selectPopular} from '@/store/popularSlice';
 
@@ -16,21 +17,40 @@ const tabNames = ['Java', 'Android', 'iOS', 'React', 'React Native', 'PHP'];
 
 export const PopularPage: React.FC = () => {
   return (
-    <Tab.Navigator
-      screenOptions={{
-        lazy: true,
-        tabBarScrollEnabled: true,
-        tabBarStyle: styles.tabBarStyle,
-        tabBarItemStyle: styles.tabBarItemStyle,
-        tabBarLabelStyle: styles.tabBarLabelStyle,
-        tabBarIndicatorStyle: styles.tabBarIndicatorStyle,
-      }}
-      initialRouteName={'Java'}>
-      {tabNames.map((item, index) => (
-        // 传递参数给 PopularTabPage
-        <Tab.Screen key={index} name={item} component={PopularTabPage} />
-      ))}
-    </Tab.Navigator>
+    <View style={{flex: 1}}>
+      <NavigationBar
+        title="最热"
+        statusBar={{
+          backgroundColor: '#a67',
+        }}
+        style={{backgroundColor: '#a67'}}
+        rightButton={
+          <View style={{padding: 5, marginRight: 8}}>
+            <Text style={{color: 'white'}}>搜索</Text>
+          </View>
+        }
+        leftButton={
+          <View style={{padding: 5, marginRight: 8}}>
+            <Text style={{color: 'white'}}>扫一扫</Text>
+          </View>
+        }
+      />
+      <Tab.Navigator
+        screenOptions={{
+          lazy: true,
+          tabBarScrollEnabled: true,
+          tabBarStyle: styles.tabBarStyle,
+          tabBarItemStyle: styles.tabBarItemStyle,
+          tabBarLabelStyle: styles.tabBarLabelStyle,
+          tabBarIndicatorStyle: styles.tabBarIndicatorStyle,
+        }}
+        initialRouteName={'Java'}>
+        {tabNames.map((item, index) => (
+          // 传递参数给 PopularTabPage
+          <Tab.Screen key={index} name={item} component={PopularTabPage} />
+        ))}
+      </Tab.Navigator>
+    </View>
   );
 };
 
