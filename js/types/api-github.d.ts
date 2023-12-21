@@ -26,3 +26,18 @@ type GitHubSearchResult = {
   incomplete_results: boolean;
   items: GitHubRepo[];
 };
+
+type GitHubTrendingRepo = {
+  id: string;
+  contributors: string[];
+  contributorsUrl: string;
+  description: string;
+  forkCount: string;
+  fullName: string;
+  language: string;
+  meta: string;
+  starCount: string;
+  url: string;
+};
+
+type GitHubTrendingResult = GitHubTrendingRepo[];

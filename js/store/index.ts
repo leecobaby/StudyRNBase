@@ -3,6 +3,7 @@ import {configureStore, ThunkAction, Action} from '@reduxjs/toolkit';
 import {demoReducer} from './demoSlice';
 import {themeReducer} from './themeSlice';
 import {popularReducer} from './popularSlice';
+import {trendingReducer} from './trendingSlice';
 import {logger} from './middlewares/logger';
 
 export const store = configureStore({
@@ -10,6 +11,7 @@ export const store = configureStore({
     demo1: demoReducer,
     theme: themeReducer,
     popular: popularReducer,
+    trending: trendingReducer,
   },
   middleware: getDefaultMiddleware => getDefaultMiddleware().concat(logger),
 });

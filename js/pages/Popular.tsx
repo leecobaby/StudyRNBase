@@ -1,8 +1,8 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, RefreshControl} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import {useToast} from 'react-native-toast-notifications';
-import {Link, RouteProp, useNavigation, useRoute} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 
 import {PopularItem} from '@/components/PopularItem';
@@ -12,7 +12,6 @@ import {fetchPopularData, selectPopular} from '@/store/popularSlice';
 
 const URL = 'https://api.github.com/search/repositories?q=';
 const QUERY_STR = '&sort=stars';
-
 const tabNames = ['Java', 'Android', 'iOS', 'React', 'React Native', 'PHP'];
 
 export const PopularPage: React.FC = () => {
