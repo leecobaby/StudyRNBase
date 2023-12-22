@@ -1,21 +1,58 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, RefreshControl} from 'react-native';
+import {View, Text, StyleSheet, RefreshControl, TouchableOpacity} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import {useToast} from 'react-native-toast-notifications';
 import {useNavigation} from '@react-navigation/native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 import {useAppDispatch, useAppSelector} from '@/hooks/store';
+import {NavigationBar} from '@/components/NavigationBar';
 import {TrendingItem} from '@/components/TrendingItem';
+import {TrendingDialog} from '@/components/TrendingDialog';
 import {fetchTrendingData, selectTrending} from '@/store/trendingSlice';
 
+export type TimeSpan = {
+  title: string;
+  value: string;
+};
+export const timespans: TimeSpan[] = [
+  {title: '今 天', value: 'daily'},
+  {title: '本 周', value: 'weekly'},
+  {title: '本 月', value: 'monthly'},
+];
+
 const URL = 'https://github.com/trending';
-const QUERY_STR = '?since=daily';
 const tabNames = ['All', 'Java', 'C', 'C#', 'Go', 'Dart'];
+const THEME_COLOR = '#a67';
 
 export const TrendingPage: React.FC = () => {
+  const [visible, setVisible] = useState(false);
+  const [timespan, setTimespan] = useState<TimeSpan>(timespans[0]);
+
+  function TitleView() {
+    return (
+      <TouchableOpacity onPress={() => setVisible(true)}>
+        <View style={{flexDirection: 'row', alignItems: 'center', flex: 1}}>
+          <Text style={{fontSize: 18, color: '#fff', fontWeight: '400'}}>趋势 {timespan.title}</Text>
+          <MaterialIcons name="arrow-drop-down" size={22} style={{color: 'white'}} />
+        </View>
+      </TouchableOpacity>
+    );
+  }
+
+  function onSelectTimeSpan(tab: TimeSpan) {
+    setVisible(false);
+    setTimespan(tab);
+  }
+
   return (
     <View style={{flex: 1}}>
+      <NavigationBar
+        statusBar={{backgroundColor: THEME_COLOR}}
+        style={{backgroundColor: THEME_COLOR}}
+        titleView={<TitleView />}
+      />
       <Tab.Navigator
         screenOptions={{
           lazy: true,
@@ -28,9 +65,10 @@ export const TrendingPage: React.FC = () => {
         initialRouteName={'All'}>
         {tabNames.map((item, index) => (
           // 传递参数给 TrendingTabPage
-          <Tab.Screen key={index} name={item} component={TrendingTabPage} />
+          <Tab.Screen key={index} name={item} children={props => <TrendingTabPage {...props} timespan={timespan} />} />
         ))}
       </Tab.Navigator>
+      <TrendingDialog visible={visible} onClose={() => setVisible(false)} onSelect={onSelectTimeSpan} />
     </View>
   );
 };
@@ -43,7 +81,7 @@ const reanderItem = (item: any) => {
 
 const pageSizes = 10;
 
-export const TrendingTabPage: React.FC<{route: any}> = ({route}) => {
+export const TrendingTabPage: React.FC<{route: any; timespan: TimeSpan}> = ({route, timespan}) => {
   const navigation = useNavigation();
   const toast = useToast();
   const dispatch = useAppDispatch();
@@ -51,7 +89,7 @@ export const TrendingTabPage: React.FC<{route: any}> = ({route}) => {
   const trendingData = trending[route.name];
   const allItems = trendingData?.items;
   const key = route.name || '';
-  const url = genFetchUrl(key);
+  const url = genFetchUrl(key, timespan.value);
   const [pageIndex, setPageIndex] = useState(1);
   const [items, setItems] = useState(allItems?.slice(0, pageIndex * pageSizes));
   const loadData = () => {
@@ -73,7 +111,7 @@ export const TrendingTabPage: React.FC<{route: any}> = ({route}) => {
 
   useEffect(() => {
     loadData();
-  }, []);
+  }, [timespan]);
 
   useEffect(() => {
     setItems(allItems?.slice(0, pageIndex * pageSizes));
@@ -114,9 +152,9 @@ export const TrendingTabPage: React.FC<{route: any}> = ({route}) => {
   );
 };
 
-function genFetchUrl(key: string) {
+function genFetchUrl(key: string, timespan: string) {
   const path = key === 'All' ? '' : '/' + key;
-  return URL + path + QUERY_STR;
+  return URL + path + '?since=' + timespan;
 }
 
 const styles = StyleSheet.create({
@@ -132,7 +170,7 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   tabBarStyle: {
-    backgroundColor: '#a67',
+    backgroundColor: THEME_COLOR,
   },
   tabBarItemStyle: {
     minWidth: 30,
