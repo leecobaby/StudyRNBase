@@ -1,6 +1,10 @@
 import type {StackScreenProps} from '@react-navigation/stack';
 import {DrawerScreenProps} from '@react-navigation/drawer';
 
+type DetailPageParams = {
+  item: GitHubRepo & GitHubTrendingRepo;
+};
+
 export type RootStackParamList = {
   Init: undefined;
   Main: {theme: {color: string}} | undefined;
@@ -10,7 +14,7 @@ export type RootStackParamList = {
   TrendingPage: undefined;
   FavoritePage: undefined;
   MyPage: undefined;
-  Detail: undefined;
+  Detail: DetailPageParams;
 };
 
 export type DrawerParamList = {

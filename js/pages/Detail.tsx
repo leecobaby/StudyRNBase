@@ -1,85 +1,87 @@
-import React, {useState} from 'react';
-import {View, Text, StyleSheet, Button, TextInput, ScrollView} from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, {useEffect, useState} from 'react';
+import {View, StyleSheet, TouchableOpacity, Linking} from 'react-native';
+import FontAwesom from 'react-native-vector-icons/FontAwesome';
 
 import {ScreenProps} from '@/navigators/type';
 import {useAppDispatch} from '@/hooks/store';
-import {toggleTheme} from '@/store/themeSlice';
-import {fetchData} from '@/dao/DataStore';
+import {NavigationBar} from '@/components/NavigationBar';
+import {LeftBackButton} from '@/components/LeftBackButton';
+import {ShareButton} from '@/components/ShareButton';
+import WebView, {WebViewNavigation} from 'react-native-webview';
+import {useBackHandler} from '@/hooks/use-backhandler';
 
-const KEY = 'save_key';
 type Props = ScreenProps<'Detail'>;
-export const Detail: React.FC<Props> = ({navigation}) => {
+
+const Domain = 'https://github.com';
+let webViewRef: WebView | null = null;
+export const Detail: React.FC<Props> = ({navigation, route}) => {
   const dispatch = useAppDispatch();
   const [value, setValue] = useState('');
-  const [data, setData] = useState([]);
-  const [storage, setStorage] = useState('');
-  const [optdata, setOptdata] = useState('');
-  const url = `https://api.github.com/search/repositories?q=${encodeURIComponent(value)}`;
+  const [title, setTitle] = useState('');
+  const [url, setUrl] = useState('');
+  const [canGoBack, setCanGoBack] = useState(false);
+  useBackHandler(onBack);
 
-  const loadData = () => {
-    fetch(url)
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        }
-        throw new Error('Network response was not ok.');
-      })
-      .then(responseData => {
-        setData(responseData.items);
-      })
-      .catch(e => {
-        console.log(e);
-      });
-  };
+  useEffect(() => {
+    const getUrlAsync = async () => {
+      // Get the deep link used to open the app
+      const initialUrl = await Linking.getInitialURL();
+      console.log('initialUrl', initialUrl);
+    };
 
-  const doSave = () => {
-    AsyncStorage.setItem(KEY, value).catch(e => console.log(e.toString()));
-  };
-  const doGet = () => {
-    AsyncStorage.getItem(KEY)
-      .then(val => {
-        setStorage(val || '');
-      })
-      .catch(e => console.log(e.toString()));
-  };
-  const doRemove = () => {
-    AsyncStorage.removeItem(KEY).catch(e => console.log(e.toString()));
-  };
+    getUrlAsync();
+  }, []);
 
-  const doGetData = () => {
-    fetchData<any>(url)
-      .then(res => {
-        setOptdata(`初次数据加载时间：${new Date(res.timestamp)}\n${JSON.stringify(res.data)}`);
-      })
-      .catch(e => {
-        console.log(e);
-      });
-  };
+  useEffect(() => {
+    const {item} = route.params;
+    setTitle(item.full_name || item.fullName);
+    setUrl(item.html_url || Domain + item.url);
+  }, [route]);
 
+  function onBack() {
+    if (canGoBack && webViewRef) {
+      webViewRef.goBack();
+      return true; // prevent default behavior (exit app)
+    } else {
+      navigation.goBack();
+      return true;
+    }
+  }
+
+  function RightButton() {
+    return (
+      <View style={{flexDirection: 'row'}}>
+        <TouchableOpacity onPress={() => {}}>
+          <FontAwesom name="star-o" size={20} style={{color: 'white', marginRight: 10}} />
+        </TouchableOpacity>
+        <ShareButton />
+      </View>
+    );
+  }
+
+  function onNavigationStateChange(nav: WebViewNavigation) {
+    setCanGoBack(nav.canGoBack);
+    setUrl(nav.url || '');
+  }
+
+  const titleLayoutStyle = title.length > 20 ? {paddingRight: 30} : null;
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.text}>Detail Page</Text>
-      <Button title="切换主题" onPress={() => dispatch(toggleTheme())} />
-
-      <TextInput style={styles.input} onChangeText={text => setValue(text)} value={value} />
-      <Button title="获取" onPress={loadData} />
-      <Text>{JSON.stringify(data)}</Text>
-
-      <Text style={styles.text}>AsyncStorage 使用</Text>
-      <View style={styles.storageAction}>
-        <Text onPress={() => doSave()}>存储</Text>
-        <Text onPress={() => doGet()}>获取</Text>
-        <Text onPress={() => doRemove()}>删除</Text>
-      </View>
-      <Text>{storage}</Text>
-
-      <Text style={styles.text}>离线缓存</Text>
-      <View style={styles.storageAction}>
-        <Text onPress={() => doGetData()}>获取</Text>
-      </View>
-      <Text>{optdata}</Text>
-    </ScrollView>
+    <View style={styles.container}>
+      <NavigationBar
+        title={title}
+        style={{backgroundColor: '#678'}}
+        titleLayoutStyle={titleLayoutStyle}
+        leftButton={<LeftBackButton onPress={() => onBack()} />}
+        rightButton={<RightButton />}
+      />
+      <WebView
+        source={{uri: url}}
+        style={{flex: 1}}
+        ref={ref => (webViewRef = ref)}
+        startInLoadingState={true}
+        onNavigationStateChange={onNavigationStateChange}
+      />
+    </View>
   );
 };
 
@@ -87,20 +89,5 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f5fcff',
-  },
-  text: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  input: {height: 30, borderColor: 'gray', borderWidth: 1, width: 200},
-  storageAction: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: 200,
-    marginVertical: 10,
   },
 });

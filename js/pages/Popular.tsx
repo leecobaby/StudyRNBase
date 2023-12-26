@@ -9,6 +9,10 @@ import {PopularItem} from '@/components/PopularItem';
 import {NavigationBar} from '@/components/NavigationBar';
 import {useAppDispatch, useAppSelector} from '@/hooks/store';
 import {fetchPopularData, selectPopular} from '@/store/popularSlice';
+import {ScreenProps} from '@/navigators/type';
+
+type Props = ScreenProps<'PopularPage'>;
+type NavigationProp = Props['navigation'];
 
 const URL = 'https://api.github.com/search/repositories?q=';
 const QUERY_STR = '&sort=stars';
@@ -55,14 +59,10 @@ export const PopularPage: React.FC = () => {
 
 const Tab = createMaterialTopTabNavigator();
 
-const reanderItem = (item: any) => {
-  return <PopularItem item={item} onSelect={() => {}} />;
-};
-
 const pageSizes = 10;
 
 export const PopularTabPage: React.FC<{route: any}> = ({route}) => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp>();
   const toast = useToast();
   const dispatch = useAppDispatch();
   const popular = useAppSelector(selectPopular);
@@ -104,6 +104,17 @@ export const PopularTabPage: React.FC<{route: any}> = ({route}) => {
   const handleEndReached = () => {
     setPageIndex(pageIndex + 1);
   };
+
+  function reanderItem(item: any) {
+    return (
+      <PopularItem
+        item={item}
+        onSelect={() => {
+          navigation.navigate('Detail', {item});
+        }}
+      />
+    );
+  }
 
   return popularData?.loading || !items ? (
     <View style={styles.container}>

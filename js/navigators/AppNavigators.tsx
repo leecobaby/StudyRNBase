@@ -24,7 +24,7 @@ const MainNavigator: React.FC<MainNavigatorProps> = ({navigation}) => {
   return (
     <Stack.Navigator>
       <Stack.Screen name="Home" component={Home} options={{header: () => null}} />
-      <Stack.Screen name="Detail" component={Detail} />
+      <Stack.Screen name="Detail" component={Detail} options={{header: () => null}} />
     </Stack.Navigator>
   );
 };

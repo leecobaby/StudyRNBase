@@ -11,6 +11,7 @@ import {NavigationBar} from '@/components/NavigationBar';
 import {TrendingItem} from '@/components/TrendingItem';
 import {TrendingDialog} from '@/components/TrendingDialog';
 import {fetchTrendingData, selectTrending} from '@/store/trendingSlice';
+import {ScreenProps} from '@/navigators/type';
 
 export type TimeSpan = {
   title: string;
@@ -21,6 +22,9 @@ export const timespans: TimeSpan[] = [
   {title: '本 周', value: 'weekly'},
   {title: '本 月', value: 'monthly'},
 ];
+
+type Props = ScreenProps<'TrendingPage'>;
+type NavigationProp = Props['navigation'];
 
 const URL = 'https://github.com/trending';
 const tabNames = ['All', 'Java', 'C', 'C#', 'Go', 'Dart'];
@@ -75,14 +79,10 @@ export const TrendingPage: React.FC = () => {
 
 const Tab = createMaterialTopTabNavigator();
 
-const reanderItem = (item: any) => {
-  return <TrendingItem item={item} onSelect={() => {}} />;
-};
-
 const pageSizes = 10;
 
 export const TrendingTabPage: React.FC<{route: any; timespan: TimeSpan}> = ({route, timespan}) => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp>();
   const toast = useToast();
   const dispatch = useAppDispatch();
   const trending = useAppSelector(selectTrending);
@@ -123,6 +123,10 @@ export const TrendingTabPage: React.FC<{route: any; timespan: TimeSpan}> = ({rou
 
   const handleEndReached = () => {
     setPageIndex(pageIndex + 1);
+  };
+
+  const reanderItem = (item: any) => {
+    return <TrendingItem item={item} onSelect={() => navigation.navigate('Detail', {item})} />;
   };
 
   return trendingData?.loading || !items ? (

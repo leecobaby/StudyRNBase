@@ -41,3 +41,7 @@ type GitHubTrendingRepo = {
 };
 
 type GitHubTrendingResult = GitHubTrendingRepo[];
+
+type CombinedRepo = {
+  [K in GitHubRepo | GitHubTrendingRepo as K extends GitHubRepo ? 'full_name' : 'fullName']: string;
+};
