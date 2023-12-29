@@ -1,30 +1,41 @@
 import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import HTMLView from 'react-native-htmlview';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+
+import {FavoriteButton} from './FavoriteButton';
+import {TrendingItemType, toggleFavorite} from '@/store/trendingSlice';
+import {useAppDispatch} from '@/hooks/store';
+import {onFavorite} from '@/dao/FavoriteDao';
+import {Flag} from '@/types/enum';
+import {useTheme} from '@react-navigation/native';
 
 type Props = {
-  item?: GitHubTrendingRepo;
+  item?: TrendingItemType;
+  index: number;
+  itemKey: string;
   onSelect: () => void;
 };
 
-export const TrendingItem: React.FC<Props> = ({item, onSelect}) => {
+export const TrendingItem: React.FC<Props> = ({item, index, itemKey, onSelect}) => {
+  const {colors} = useTheme();
+  const dispatch = useAppDispatch();
   if (!item || !item.id) return null;
 
   const description = '<p>' + item.description + '</p>';
+  const flag = Flag.trending;
 
-  function FavoriteButton() {
-    return (
-      <TouchableOpacity style={{padding: 6}} onPress={() => {}}>
-        <FontAwesome name={'star-o'} size={26} style={{color: 'red'}} />
-      </TouchableOpacity>
-    );
+  function onPressFavorite() {
+    if (!item) return;
+    const isFavorite = !item.isFavorite;
+    dispatch(toggleFavorite({item, index, key: itemKey}));
+    onFavorite(flag, item, isFavorite);
   }
 
   return (
     <TouchableOpacity onPress={onSelect}>
       <View style={styles.container}>
         <Text style={styles.title}>{item.fullName}</Text>
+        <Text style={styles.description}>{item.description}</Text>
         <HTMLView
           value={description}
           onLinkPress={url => {}}
@@ -41,7 +52,7 @@ export const TrendingItem: React.FC<Props> = ({item, onSelect}) => {
               return <Image key={i} style={{height: 22, width: 22, margin: 2}} source={{uri: arr[i]}} />;
             })}
           </View>
-          <FavoriteButton />
+          <FavoriteButton isFavorite={item.isFavorite} onPress={onPressFavorite} color={colors.primary} />
         </View>
       </View>
     </TouchableOpacity>

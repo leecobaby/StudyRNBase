@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, RefreshControl} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import {useToast} from 'react-native-toast-notifications';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useTheme} from '@react-navigation/native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 
 import {PopularItem} from '@/components/PopularItem';
@@ -19,14 +19,13 @@ const QUERY_STR = '&sort=stars';
 const tabNames = ['Java', 'Android', 'iOS', 'React', 'React Native', 'PHP'];
 
 export const PopularPage: React.FC = () => {
+  const {colors} = useTheme();
   return (
     <View style={{flex: 1}}>
       <NavigationBar
         title="最热"
-        statusBar={{
-          backgroundColor: '#a67',
-        }}
-        style={{backgroundColor: '#a67'}}
+        statusBar={{backgroundColor: colors.primary}}
+        style={{backgroundColor: colors.primary}}
         rightButton={
           <View style={{padding: 5, marginRight: 8}}>
             <Text style={{color: 'white'}}>搜索</Text>
@@ -42,7 +41,7 @@ export const PopularPage: React.FC = () => {
         screenOptions={{
           lazy: true,
           tabBarScrollEnabled: true,
-          tabBarStyle: styles.tabBarStyle,
+          tabBarStyle: [styles.tabBarStyle, {backgroundColor: colors.primary}],
           tabBarItemStyle: styles.tabBarItemStyle,
           tabBarLabelStyle: styles.tabBarLabelStyle,
           tabBarIndicatorStyle: styles.tabBarIndicatorStyle,
@@ -105,10 +104,12 @@ export const PopularTabPage: React.FC<{route: any}> = ({route}) => {
     setPageIndex(pageIndex + 1);
   };
 
-  function reanderItem(item: any) {
+  function reanderItem(item: any, index: number) {
     return (
       <PopularItem
+        itemKey={key}
         item={item}
+        index={index}
         onSelect={() => {
           navigation.navigate('Detail', {item});
         }}
@@ -124,7 +125,7 @@ export const PopularTabPage: React.FC<{route: any}> = ({route}) => {
     <View style={styles.container}>
       <FlatList
         data={items}
-        renderItem={({item}) => reanderItem(item)}
+        renderItem={({item, index}) => reanderItem(item, index)}
         keyExtractor={item => '' + item?.id}
         refreshControl={
           <RefreshControl

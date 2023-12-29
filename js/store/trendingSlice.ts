@@ -2,8 +2,14 @@ import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 
 import {RootState} from './index';
 import {GitHubTrending} from '@/dao/GitHubTrending';
+import {Flag} from '@/types/enum';
+import {wrapFavorite} from './util';
 
-type Items = GitHubTrendingRepo[] | null;
+export interface TrendingItemType extends GitHubTrendingRepo {
+  isFavorite: boolean;
+}
+
+type Items = TrendingItemType[] | null;
 
 interface State {
   [key: string]: {
@@ -13,6 +19,8 @@ interface State {
   };
 }
 
+const flag = Flag.trending;
+
 const initialState: State = {
   Java: {
     loading: false,
@@ -20,10 +28,28 @@ const initialState: State = {
   },
 };
 
+type ToggleFavoriteAction = {
+  payload: {
+    index: number;
+    key: string;
+    item: TrendingItemType;
+  };
+};
+
 const trendingSlice = createSlice({
   name: 'trending',
   initialState,
-  reducers: {},
+  reducers: {
+    toggleFavorite(state, action: ToggleFavoriteAction) {
+      const {index, item} = action.payload;
+      const key = action.payload.key;
+      const isFavorite = !item.isFavorite;
+      state[key].items![index] = {
+        ...item,
+        isFavorite,
+      };
+    },
+  },
   extraReducers: builder => {
     builder
       .addCase(fetchTrendingData.pending, (state, action) => {
@@ -46,14 +72,14 @@ const trendingSlice = createSlice({
   },
 });
 
-export const fetchTrendingData = createAsyncThunk<GitHubTrendingResult, {url: string; key: string}>(
+export const fetchTrendingData = createAsyncThunk<TrendingItemType[], {url: string; key: string}>(
   'trending/fetchTrendingData',
   arg => {
     return new GitHubTrending('fd82d1e882462e23b8e88aa82198f166')
       .fetchTrending<GitHubTrendingResult>(arg.url)
       .then(res => {
         if (!res) throw new Error('responseData is null');
-        return res;
+        return wrapFavorite(res, flag);
       })
       .catch((error: any) => {
         throw new Error(error);
@@ -63,3 +89,4 @@ export const fetchTrendingData = createAsyncThunk<GitHubTrendingResult, {url: st
 
 export const trendingReducer = trendingSlice.reducer;
 export const selectTrending = (state: RootState) => state.trending;
+export const {toggleFavorite} = trendingSlice.actions;

@@ -2,20 +2,32 @@ import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
+import {Flag} from '@/types/enum';
+import {onFavorite} from '@/dao/FavoriteDao';
+import {useAppDispatch} from '@/hooks/store';
+import {FavoriteButton} from './FavoriteButton';
+import {PopularItemType, toggleFavorite} from '@/store/popularSlice';
+import {useTheme} from '@react-navigation/native';
+
 type Props = {
-  item?: GitHubRepo;
+  item?: PopularItemType;
+  index: number;
+  itemKey: string;
   onSelect: () => void;
 };
 
-export const PopularItem: React.FC<Props> = ({item, onSelect}) => {
+export const PopularItem: React.FC<Props> = ({item, index, itemKey, onSelect}) => {
+  const dispatch = useAppDispatch();
+  const {colors} = useTheme();
   if (!item || !item.owner) return null;
+  const flag = Flag.popular;
 
-  const FavoriteButton = (
-    <TouchableOpacity style={{padding: 6}} onPress={() => {}}>
-      <FontAwesome name={'star-o'} size={26} style={{color: 'red'}} />
-    </TouchableOpacity>
-  );
-
+  function onPressFavorite() {
+    if (!item) return;
+    const isFavorite = !item.isFavorite;
+    dispatch(toggleFavorite({item, index, key: itemKey}));
+    onFavorite(flag, item, isFavorite);
+  }
   return (
     <TouchableOpacity onPress={onSelect}>
       <View style={stlyes.container}>
@@ -30,7 +42,7 @@ export const PopularItem: React.FC<Props> = ({item, onSelect}) => {
             <Text>Stars:</Text>
             <Text>{item.stargazers_count}</Text>
           </View>
-          {FavoriteButton}
+          <FavoriteButton isFavorite={item.isFavorite} onPress={onPressFavorite} color={colors.primary} />
         </View>
       </View>
     </TouchableOpacity>

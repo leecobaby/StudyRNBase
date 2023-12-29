@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, RefreshControl, TouchableOpacity} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import {useToast} from 'react-native-toast-notifications';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useTheme} from '@react-navigation/native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
@@ -31,6 +31,7 @@ const tabNames = ['All', 'Java', 'C', 'C#', 'Go', 'Dart'];
 const THEME_COLOR = '#a67';
 
 export const TrendingPage: React.FC = () => {
+  const {colors} = useTheme();
   const [visible, setVisible] = useState(false);
   const [timespan, setTimespan] = useState<TimeSpan>(timespans[0]);
 
@@ -53,15 +54,15 @@ export const TrendingPage: React.FC = () => {
   return (
     <View style={{flex: 1}}>
       <NavigationBar
-        statusBar={{backgroundColor: THEME_COLOR}}
-        style={{backgroundColor: THEME_COLOR}}
+        statusBar={{backgroundColor: colors.primary}}
+        style={{backgroundColor: colors.primary}}
         titleView={<TitleView />}
       />
       <Tab.Navigator
         screenOptions={{
           lazy: true,
           tabBarScrollEnabled: true,
-          tabBarStyle: styles.tabBarStyle,
+          tabBarStyle: [styles.tabBarStyle, {backgroundColor: colors.primary}],
           tabBarItemStyle: styles.tabBarItemStyle,
           tabBarLabelStyle: styles.tabBarLabelStyle,
           tabBarIndicatorStyle: styles.tabBarIndicatorStyle,
@@ -125,8 +126,10 @@ export const TrendingTabPage: React.FC<{route: any; timespan: TimeSpan}> = ({rou
     setPageIndex(pageIndex + 1);
   };
 
-  const reanderItem = (item: any) => {
-    return <TrendingItem item={item} onSelect={() => navigation.navigate('Detail', {item})} />;
+  const reanderItem = (item: any, index: number) => {
+    return (
+      <TrendingItem itemKey={key} item={item} index={index} onSelect={() => navigation.navigate('Detail', {item})} />
+    );
   };
 
   return trendingData?.loading || !items ? (
@@ -137,7 +140,7 @@ export const TrendingTabPage: React.FC<{route: any; timespan: TimeSpan}> = ({rou
     <View style={styles.container}>
       <FlatList
         data={items}
-        renderItem={({item}) => reanderItem(item)}
+        renderItem={({item, index}) => reanderItem(item, index)}
         keyExtractor={item => '' + item?.id}
         refreshControl={
           <RefreshControl

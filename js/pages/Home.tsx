@@ -9,19 +9,20 @@ import {PopularPage} from './Popular';
 import {FavoritePage} from './Favorite';
 import {TrendingPage} from './Trending';
 import {RootStackParamList, ScreenProps} from '@/navigators/type';
+import {useTheme} from '@react-navigation/native';
 
 const BottomTab = createBottomTabNavigator<RootStackParamList>();
 
 type HomeNavigatorProps = ScreenProps<'Home'>;
 export const Home: React.FC<HomeNavigatorProps> = ({navigation}) => {
-  const {theme} = navigation.getState().routes.at(0)?.params || {};
+  const {colors} = useTheme();
 
   return (
     <BottomTab.Navigator
       screenOptions={{
         tabBarLabelStyle: {fontSize: 16},
         header: () => null,
-        tabBarActiveTintColor: theme?.color,
+        tabBarActiveTintColor: colors.primary,
       }}>
       <BottomTab.Screen
         name="PopularPage"
