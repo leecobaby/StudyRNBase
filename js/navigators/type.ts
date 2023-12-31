@@ -1,8 +1,15 @@
 import type {StackScreenProps} from '@react-navigation/stack';
 import {DrawerScreenProps} from '@react-navigation/drawer';
 
+import {Flag} from '@/types/enum';
+import {PopularItemType} from '@/store/popularSlice';
+import {TrendingItemType} from '@/store/trendingSlice';
+
 type DetailPageParams = {
-  item: GitHubRepo & GitHubTrendingRepo;
+  item: PopularItemType | TrendingItemType;
+  itemKey: string;
+  index: number;
+  flag: Flag;
 };
 
 export type RootStackParamList = {

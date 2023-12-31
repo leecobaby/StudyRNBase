@@ -10,6 +10,7 @@ import {NavigationBar} from '@/components/NavigationBar';
 import {useAppDispatch, useAppSelector} from '@/hooks/store';
 import {fetchPopularData, selectPopular} from '@/store/popularSlice';
 import {ScreenProps} from '@/navigators/type';
+import {Flag} from '@/types/enum';
 
 type Props = ScreenProps<'PopularPage'>;
 type NavigationProp = Props['navigation'];
@@ -71,6 +72,7 @@ export const PopularTabPage: React.FC<{route: any}> = ({route}) => {
   const url = genFetchUrl(key);
   const [pageIndex, setPageIndex] = useState(1);
   const [items, setItems] = useState(allItems?.slice(0, pageIndex * pageSizes));
+  const flag = Flag.popular;
   const loadData = () => {
     dispatch(fetchPopularData({key, url}));
   };
@@ -111,7 +113,7 @@ export const PopularTabPage: React.FC<{route: any}> = ({route}) => {
         item={item}
         index={index}
         onSelect={() => {
-          navigation.navigate('Detail', {item});
+          navigation.navigate('Detail', {item, flag, itemKey: key, index});
         }}
       />
     );

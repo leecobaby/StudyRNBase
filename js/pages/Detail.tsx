@@ -9,6 +9,10 @@ import {LeftBackButton} from '@/components/LeftBackButton';
 import {ShareButton} from '@/components/ShareButton';
 import WebView, {WebViewNavigation} from 'react-native-webview';
 import {useBackHandler} from '@/hooks/use-backhandler';
+import {isGitHubRepo} from '@/utils';
+import {toggleFavorite as togglePopularFavorite} from '@/store/popularSlice';
+import {toggleFavorite as toggleTrendingFavorite} from '@/store/trendingSlice';
+import {onFavorite} from '@/dao/FavoriteDao';
 
 type Props = ScreenProps<'Detail'>;
 
@@ -16,26 +20,18 @@ const Domain = 'https://github.com';
 let webViewRef: WebView | null = null;
 export const Detail: React.FC<Props> = ({navigation, route}) => {
   const dispatch = useAppDispatch();
-  const [value, setValue] = useState('');
   const [title, setTitle] = useState('');
   const [url, setUrl] = useState('');
   const [canGoBack, setCanGoBack] = useState(false);
+  const {item, itemKey, index, flag} = route.params;
+  const [isFavorite, setIsFavorite] = useState(item.isFavorite);
   useBackHandler(onBack);
 
   useEffect(() => {
-    const getUrlAsync = async () => {
-      // Get the deep link used to open the app
-      const initialUrl = await Linking.getInitialURL();
-      console.log('initialUrl', initialUrl);
-    };
-
-    getUrlAsync();
-  }, []);
-
-  useEffect(() => {
-    const {item} = route.params;
-    setTitle(item.full_name || item.fullName);
-    setUrl(item.html_url || Domain + item.url);
+    const name = isGitHubRepo(item) ? item.full_name : item.fullName;
+    const url = isGitHubRepo(item) ? item.html_url : Domain + item.url;
+    setTitle(name);
+    setUrl(url);
   }, [route]);
 
   function onBack() {
@@ -48,11 +44,22 @@ export const Detail: React.FC<Props> = ({navigation, route}) => {
     }
   }
 
+  function onPressFavorite() {
+    if (isGitHubRepo(item)) {
+      dispatch(togglePopularFavorite({item, index, key: itemKey}));
+    } else {
+      dispatch(toggleTrendingFavorite({item, index, key: itemKey}));
+    }
+    const newIsFavorite = !isFavorite;
+    setIsFavorite(newIsFavorite);
+    onFavorite(flag, item, newIsFavorite);
+  }
+
   function RightButton() {
     return (
       <View style={{flexDirection: 'row'}}>
-        <TouchableOpacity onPress={() => {}}>
-          <FontAwesom name="star-o" size={20} style={{color: 'white', marginRight: 10}} />
+        <TouchableOpacity onPress={onPressFavorite}>
+          <FontAwesom name={isFavorite ? 'star' : 'star-o'} size={20} style={{color: 'white', marginRight: 10}} />
         </TouchableOpacity>
         <ShareButton />
       </View>

@@ -12,6 +12,7 @@ import {TrendingItem} from '@/components/TrendingItem';
 import {TrendingDialog} from '@/components/TrendingDialog';
 import {fetchTrendingData, selectTrending} from '@/store/trendingSlice';
 import {ScreenProps} from '@/navigators/type';
+import {Flag} from '@/types/enum';
 
 export type TimeSpan = {
   title: string;
@@ -93,6 +94,7 @@ export const TrendingTabPage: React.FC<{route: any; timespan: TimeSpan}> = ({rou
   const url = genFetchUrl(key, timespan.value);
   const [pageIndex, setPageIndex] = useState(1);
   const [items, setItems] = useState(allItems?.slice(0, pageIndex * pageSizes));
+  const flag = Flag.trending;
   const loadData = () => {
     dispatch(fetchTrendingData({key, url}));
   };
@@ -128,7 +130,12 @@ export const TrendingTabPage: React.FC<{route: any; timespan: TimeSpan}> = ({rou
 
   const reanderItem = (item: any, index: number) => {
     return (
-      <TrendingItem itemKey={key} item={item} index={index} onSelect={() => navigation.navigate('Detail', {item})} />
+      <TrendingItem
+        itemKey={key}
+        item={item}
+        index={index}
+        onSelect={() => navigation.navigate('Detail', {item, index, flag, itemKey: key})}
+      />
     );
   };
 
