@@ -3,7 +3,7 @@ import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import {RootState} from './index';
 import {CachedData, fetchData} from '@/dao/DataStore';
 import {Flag} from '@/types/enum';
-import {wrapFavorite} from './util';
+import {wrapFavorite} from '@/dao/FavoriteDao';
 
 export interface PopularItemType extends GitHubRepo {
   isFavorite: boolean;

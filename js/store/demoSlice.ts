@@ -21,4 +21,4 @@ export const demoSlice = createSlice({
 
 export const {increment} = demoSlice.actions;
 export const demoReducer = demoSlice.reducer;
-export const selectValue = (state: RootState) => state.demo1.value;
+export const selectValue = (state: RootState) => state.demo.value;

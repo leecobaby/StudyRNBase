@@ -1,15 +1,14 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 
 import {RootState} from './index';
-import {GitHubTrending} from '@/dao/GitHubTrending';
 import {Flag} from '@/types/enum';
-import {wrapFavorite} from '@/dao/FavoriteDao';
+import {getFavoriteItems, wrapFavorite} from '@/dao/FavoriteDao';
 
-export interface TrendingItemType extends GitHubTrendingRepo {
+export type FavoriteItemType = GitHubItem & {
   isFavorite: boolean;
-}
+};
 
-type Items = TrendingItemType[] | null;
+type Items = FavoriteItemType[] | null;
 
 interface State {
   [key: string]: {
@@ -19,10 +18,12 @@ interface State {
   };
 }
 
-const flag = Flag.trending;
-
 const initialState: State = {
-  Java: {
+  Popular: {
+    loading: false,
+    items: null,
+  },
+  Trending: {
     loading: false,
     items: null,
   },
@@ -32,17 +33,16 @@ type ToggleFavoriteAction = {
   payload: {
     index: number;
     key: string;
-    item: TrendingItemType;
+    item: FavoriteItemType;
   };
 };
 
-const trendingSlice = createSlice({
-  name: 'trending',
+const favoriteSlice = createSlice({
+  name: 'favorite',
   initialState,
   reducers: {
     toggleFavorite(state, action: ToggleFavoriteAction) {
-      const {index, item} = action.payload;
-      const key = action.payload.key;
+      const {index, item, key} = action.payload;
       const isFavorite = !item.isFavorite;
       state[key].items![index] = {
         ...item,
@@ -52,18 +52,18 @@ const trendingSlice = createSlice({
   },
   extraReducers: builder => {
     builder
-      .addCase(fetchTrendingData.pending, (state, action) => {
+      .addCase(fetchFavoriteData.pending, (state, action) => {
         const key = action.meta.arg.key;
         state[key] = state[key] || {};
         state[key].loading = true;
       })
-      .addCase(fetchTrendingData.fulfilled, (state, action) => {
+      .addCase(fetchFavoriteData.fulfilled, (state, action) => {
         const key = action.meta.arg.key;
         state[key] = state[key] || {};
         state[key].loading = false;
         state[key].items = action.payload;
       })
-      .addCase(fetchTrendingData.rejected, (state, action) => {
+      .addCase(fetchFavoriteData.rejected, (state, action) => {
         const key = action.meta.arg.key;
         state[key] = state[key] || {};
         state[key].loading = false;
@@ -72,21 +72,22 @@ const trendingSlice = createSlice({
   },
 });
 
-export const fetchTrendingData = createAsyncThunk<TrendingItemType[], {url: string; key: string}>(
-  'trending/fetchTrendingData',
+export const fetchFavoriteData = createAsyncThunk<Items, {flag: Flag; key: string}>(
+  'favorite/fetchFavoriteData',
   arg => {
-    return new GitHubTrending('fd82d1e882462e23b8e88aa82198f166')
-      .fetchTrending<GitHubTrendingResult>(arg.url)
-      .then(res => {
-        if (!res) throw new Error('responseData is null');
-        return wrapFavorite(res, flag);
+    const {flag} = arg;
+    return getFavoriteItems(flag)
+      .then(favoriteItems => {
+        const items = Object.keys(favoriteItems).map(key => JSON.parse(favoriteItems[key]));
+        return wrapFavorite(items, flag);
       })
-      .catch((error: any) => {
-        throw new Error(error);
+      .catch(error => {
+        console.error('Failed to get favorite items', error);
+        return [];
       });
   },
 );
 
-export const trendingReducer = trendingSlice.reducer;
-export const selectTrending = (state: RootState) => state.trending;
-export const {toggleFavorite} = trendingSlice.actions;
+export const favoriteReducer = favoriteSlice.reducer;
+export const selectFavorite = (state: RootState) => state.favorite;
+export const {toggleFavorite} = favoriteSlice.actions;

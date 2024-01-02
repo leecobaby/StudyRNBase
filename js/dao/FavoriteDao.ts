@@ -3,13 +3,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {isGitHubRepo, isGitHubTrendingRepo} from '@/utils';
 import {Flag} from '@/types/enum';
 
-const FAVORITE_KEY_PREFIX = 'favorite_';
+export const FAVORITE_KEY_PREFIX = 'favorite_';
 
-export function getFavoriteKey(flag: string) {
+export function getFavoriteKey(flag: Flag) {
   return FAVORITE_KEY_PREFIX + flag;
 }
 
-export async function saveFavoriteItem(flag: string, key: string, value: string, isAdd: boolean) {
+export async function saveFavoriteItem(flag: Flag, key: string, value: string, isAdd: boolean) {
   const favoriteKey = getFavoriteKey(flag);
   let favoriteItems: {[key: string]: string} = {};
   try {
@@ -26,7 +26,7 @@ export async function saveFavoriteItem(flag: string, key: string, value: string,
   }
 }
 
-export async function getFavoriteItems(flag: string): Promise<{[key: string]: string}> {
+export async function getFavoriteItems(flag: Flag): Promise<{[key: string]: string}> {
   const favoriteKey = getFavoriteKey(flag);
   try {
     const result = await AsyncStorage.getItem(favoriteKey);

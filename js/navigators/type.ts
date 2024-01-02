@@ -4,9 +4,10 @@ import {DrawerScreenProps} from '@react-navigation/drawer';
 import {Flag} from '@/types/enum';
 import {PopularItemType} from '@/store/popularSlice';
 import {TrendingItemType} from '@/store/trendingSlice';
+import {FavoriteItemType} from '@/store/favoriteSlice';
 
 type DetailPageParams = {
-  item: PopularItemType | TrendingItemType;
+  item: PopularItemType | TrendingItemType | FavoriteItemType;
   itemKey: string;
   index: number;
   flag: Flag;

@@ -1,13 +1,13 @@
 import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import {Flag} from '@/types/enum';
 import {onFavorite} from '@/dao/FavoriteDao';
 import {useAppDispatch} from '@/hooks/store';
 import {FavoriteButton} from './FavoriteButton';
-import {PopularItemType, toggleFavorite} from '@/store/popularSlice';
+import {PopularItemType} from '@/store/popularSlice';
 import {useTheme} from '@react-navigation/native';
+import {getDispatchAction} from '@/utils';
 
 type Props = {
   item?: PopularItemType;
@@ -24,8 +24,9 @@ export const PopularItem: React.FC<Props> = ({item, index, itemKey, onSelect}) =
 
   function onPressFavorite() {
     if (!item) return;
+    const dispatchAction = getDispatchAction(flag, itemKey);
+    dispatch(dispatchAction({item: item as any, index, key: itemKey}));
     const isFavorite = !item.isFavorite;
-    dispatch(toggleFavorite({item, index, key: itemKey}));
     onFavorite(flag, item, isFavorite);
   }
   return (

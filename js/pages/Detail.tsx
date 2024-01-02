@@ -10,9 +10,9 @@ import {ShareButton} from '@/components/ShareButton';
 import WebView, {WebViewNavigation} from 'react-native-webview';
 import {useBackHandler} from '@/hooks/use-backhandler';
 import {isGitHubRepo} from '@/utils';
-import {toggleFavorite as togglePopularFavorite} from '@/store/popularSlice';
-import {toggleFavorite as toggleTrendingFavorite} from '@/store/trendingSlice';
+import {getDispatchAction} from '@/utils';
 import {onFavorite} from '@/dao/FavoriteDao';
+import {Flag} from '@/types/enum';
 
 type Props = ScreenProps<'Detail'>;
 
@@ -45,11 +45,9 @@ export const Detail: React.FC<Props> = ({navigation, route}) => {
   }
 
   function onPressFavorite() {
-    if (isGitHubRepo(item)) {
-      dispatch(togglePopularFavorite({item, index, key: itemKey}));
-    } else {
-      dispatch(toggleTrendingFavorite({item, index, key: itemKey}));
-    }
+    const dispatchAction = getDispatchAction(flag, itemKey);
+    dispatch(dispatchAction({item: item as any, index, key: itemKey}));
+
     const newIsFavorite = !isFavorite;
     setIsFavorite(newIsFavorite);
     onFavorite(flag, item, newIsFavorite);

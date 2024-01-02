@@ -5,13 +5,15 @@ import {themeReducer} from './themeSlice';
 import {popularReducer} from './popularSlice';
 import {trendingReducer} from './trendingSlice';
 import {logger} from './middlewares/logger';
+import {favoriteReducer} from './favoriteSlice';
 
 export const store = configureStore({
   reducer: {
-    demo1: demoReducer,
+    demo: demoReducer,
     theme: themeReducer,
     popular: popularReducer,
     trending: trendingReducer,
+    favorite: favoriteReducer,
   },
   middleware: getDefaultMiddleware => getDefaultMiddleware().concat(logger),
 });

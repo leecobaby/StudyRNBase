@@ -3,11 +3,13 @@ import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import HTMLView from 'react-native-htmlview';
 
 import {FavoriteButton} from './FavoriteButton';
-import {TrendingItemType, toggleFavorite} from '@/store/trendingSlice';
 import {useAppDispatch} from '@/hooks/store';
 import {onFavorite} from '@/dao/FavoriteDao';
 import {Flag} from '@/types/enum';
 import {useTheme} from '@react-navigation/native';
+import {TrendingItemType, toggleFavorite} from '@/store/trendingSlice';
+import {toggleFavorite as toggleFavoriteSelf} from '@/store/favoriteSlice';
+import {getDispatchAction} from '@/utils';
 
 type Props = {
   item?: TrendingItemType;
@@ -26,8 +28,9 @@ export const TrendingItem: React.FC<Props> = ({item, index, itemKey, onSelect}) 
 
   function onPressFavorite() {
     if (!item) return;
+    const dispatchAction = getDispatchAction(flag, itemKey);
+    dispatch(dispatchAction({item: item as any, index, key: itemKey}));
     const isFavorite = !item.isFavorite;
-    dispatch(toggleFavorite({item, index, key: itemKey}));
     onFavorite(flag, item, isFavorite);
   }
 
