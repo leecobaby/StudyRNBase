@@ -7,9 +7,9 @@ import {useAppDispatch} from '@/hooks/store';
 import {onFavorite} from '@/dao/FavoriteDao';
 import {Flag} from '@/types/enum';
 import {useTheme} from '@react-navigation/native';
-import {TrendingItemType, toggleFavorite} from '@/store/trendingSlice';
-import {toggleFavorite as toggleFavoriteSelf} from '@/store/favoriteSlice';
+import {TrendingItemType} from '@/store/trendingSlice';
 import {getDispatchAction} from '@/utils';
+import {updateFavoriteCounter} from '@/store/updateSlice';
 
 type Props = {
   item?: TrendingItemType;
@@ -26,12 +26,14 @@ export const TrendingItem: React.FC<Props> = ({item, index, itemKey, onSelect}) 
   const description = '<p>' + item.description + '</p>';
   const flag = Flag.trending;
 
-  function onPressFavorite() {
+  async function onPressFavorite() {
     if (!item) return;
     const dispatchAction = getDispatchAction(flag, itemKey);
     dispatch(dispatchAction({item: item as any, index, key: itemKey}));
     const isFavorite = !item.isFavorite;
-    onFavorite(flag, item, isFavorite);
+    const key = itemKey === 'trending' ? 'trending' : 'favorite';
+    dispatch(updateFavoriteCounter(key));
+    await onFavorite(flag, item, isFavorite);
   }
 
   return (

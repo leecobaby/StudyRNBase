@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, RefreshControl, TouchableOpacity} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import {useToast} from 'react-native-toast-notifications';
-import {useNavigation, useTheme} from '@react-navigation/native';
+import {useFocusEffect, useNavigation, useTheme} from '@react-navigation/native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
@@ -13,7 +13,6 @@ import {TrendingDialog} from '@/components/TrendingDialog';
 import {fetchTrendingData, selectTrending} from '@/store/trendingSlice';
 import {ScreenProps} from '@/navigators/type';
 import {Flag} from '@/types/enum';
-
 export type TimeSpan = {
   title: string;
   value: string;
@@ -82,12 +81,16 @@ export const TrendingPage: React.FC = () => {
 const Tab = createMaterialTopTabNavigator();
 
 const pageSizes = 10;
+const cache = {
+  update: 0,
+};
 
 export const TrendingTabPage: React.FC<{route: any; timespan: TimeSpan}> = ({route, timespan}) => {
   const navigation = useNavigation<NavigationProp>();
   const toast = useToast();
   const dispatch = useAppDispatch();
   const trending = useAppSelector(selectTrending);
+  const updateTrending = useAppSelector(state => state.update.trending);
   const trendingData = trending[route.name];
   const allItems = trendingData?.items;
   const key = route.name || '';
@@ -123,6 +126,16 @@ export const TrendingTabPage: React.FC<{route: any; timespan: TimeSpan}> = ({rou
   useEffect(() => {
     loadMore();
   }, [pageIndex]);
+
+  useFocusEffect(
+    // 当 updateTrending 变化时，重新加载数据
+    React.useCallback(() => {
+      if (cache.update !== updateTrending) {
+        loadData();
+        cache.update = updateTrending;
+      }
+    }, [updateTrending]),
+  );
 
   const handleEndReached = () => {
     setPageIndex(pageIndex + 1);

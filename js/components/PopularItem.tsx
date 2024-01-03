@@ -8,6 +8,7 @@ import {FavoriteButton} from './FavoriteButton';
 import {PopularItemType} from '@/store/popularSlice';
 import {useTheme} from '@react-navigation/native';
 import {getDispatchAction} from '@/utils';
+import {updateFavoriteCounter} from '@/store/updateSlice';
 
 type Props = {
   item?: PopularItemType;
@@ -27,6 +28,8 @@ export const PopularItem: React.FC<Props> = ({item, index, itemKey, onSelect}) =
     const dispatchAction = getDispatchAction(flag, itemKey);
     dispatch(dispatchAction({item: item as any, index, key: itemKey}));
     const isFavorite = !item.isFavorite;
+    const key = itemKey === 'popular' ? 'popular' : 'favorite';
+    dispatch(updateFavoriteCounter(key));
     onFavorite(flag, item, isFavorite);
   }
   return (

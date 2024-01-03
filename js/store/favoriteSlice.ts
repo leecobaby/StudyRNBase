@@ -19,11 +19,11 @@ interface State {
 }
 
 const initialState: State = {
-  Popular: {
+  popular: {
     loading: false,
     items: null,
   },
-  Trending: {
+  trending: {
     loading: false,
     items: null,
   },
@@ -53,18 +53,18 @@ const favoriteSlice = createSlice({
   extraReducers: builder => {
     builder
       .addCase(fetchFavoriteData.pending, (state, action) => {
-        const key = action.meta.arg.key;
+        const key = action.meta.arg.flag;
         state[key] = state[key] || {};
         state[key].loading = true;
       })
       .addCase(fetchFavoriteData.fulfilled, (state, action) => {
-        const key = action.meta.arg.key;
+        const key = action.meta.arg.flag;
         state[key] = state[key] || {};
         state[key].loading = false;
         state[key].items = action.payload;
       })
       .addCase(fetchFavoriteData.rejected, (state, action) => {
-        const key = action.meta.arg.key;
+        const key = action.meta.arg.flag;
         state[key] = state[key] || {};
         state[key].loading = false;
         state[key].error = action.error.message;
@@ -72,21 +72,18 @@ const favoriteSlice = createSlice({
   },
 });
 
-export const fetchFavoriteData = createAsyncThunk<Items, {flag: Flag; key: string}>(
-  'favorite/fetchFavoriteData',
-  arg => {
-    const {flag} = arg;
-    return getFavoriteItems(flag)
-      .then(favoriteItems => {
-        const items = Object.keys(favoriteItems).map(key => JSON.parse(favoriteItems[key]));
-        return wrapFavorite(items, flag);
-      })
-      .catch(error => {
-        console.error('Failed to get favorite items', error);
-        return [];
-      });
-  },
-);
+export const fetchFavoriteData = createAsyncThunk<Items, {flag: Flag}>('favorite/fetchFavoriteData', arg => {
+  const {flag} = arg;
+  return getFavoriteItems(flag)
+    .then(favoriteItems => {
+      const items = Object.keys(favoriteItems).map(key => JSON.parse(favoriteItems[key]));
+      return wrapFavorite(items, flag);
+    })
+    .catch(error => {
+      console.error('Failed to get favorite items', error);
+      return [];
+    });
+});
 
 export const favoriteReducer = favoriteSlice.reducer;
 export const selectFavorite = (state: RootState) => state.favorite;

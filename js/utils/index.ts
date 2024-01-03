@@ -18,7 +18,7 @@ const actionMap = {
 };
 
 export function getDispatchAction(flag: Flag, itemKey: string) {
-  const isFavorite = itemKey.toLowerCase() === Flag.popular || itemKey.toLowerCase() === Flag.trending;
+  const isFavorite = itemKey === Flag.popular || itemKey === Flag.trending;
   const action = isFavorite ? actionMap.favorite : actionMap[flag];
   return action;
 }

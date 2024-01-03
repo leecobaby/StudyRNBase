@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, RefreshControl} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import {useToast} from 'react-native-toast-notifications';
-import {useNavigation, useTheme} from '@react-navigation/native';
+import {useFocusEffect, useNavigation, useTheme} from '@react-navigation/native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 
 import {PopularItem} from '@/components/PopularItem';
@@ -60,12 +60,16 @@ export const PopularPage: React.FC = () => {
 const Tab = createMaterialTopTabNavigator();
 
 const pageSizes = 10;
+const cache = {
+  update: 0,
+};
 
 export const PopularTabPage: React.FC<{route: any}> = ({route}) => {
   const navigation = useNavigation<NavigationProp>();
   const toast = useToast();
   const dispatch = useAppDispatch();
   const popular = useAppSelector(selectPopular);
+  const updatePopular = useAppSelector(state => state.update.popular);
   const popularData = popular[route.name];
   const allItems = popularData?.items;
   const key = route.name || '';
@@ -76,6 +80,7 @@ export const PopularTabPage: React.FC<{route: any}> = ({route}) => {
   const loadData = () => {
     dispatch(fetchPopularData({key, url}));
   };
+  console.log('cache.update', cache.update, updatePopular);
 
   const loadMore = () => {
     if (!allItems) return;
@@ -101,6 +106,15 @@ export const PopularTabPage: React.FC<{route: any}> = ({route}) => {
   useEffect(() => {
     loadMore();
   }, [pageIndex]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      if (cache.update !== updatePopular) {
+        loadData();
+        cache.update = updatePopular;
+      }
+    }, [updatePopular]),
+  );
 
   const handleEndReached = () => {
     setPageIndex(pageIndex + 1);
