@@ -2,12 +2,14 @@ import React from 'react';
 import {View, Text, StyleSheet, Button, ScrollView, TouchableOpacity} from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 import {ScreenProps} from '@/navigators/type';
 import {NavigationBar} from '@/components/NavigationBar';
 import {MORE_MENU} from '@/dao/MenuConst';
 import {useTheme} from '@react-navigation/native';
 import {GlobalStyles} from '@/GlobalStyles';
+import {SettingItem} from '@/components/SettingItem';
 
 type Props = ScreenProps<'MyPage'>;
 export const MyPage: React.FC<Props> = ({navigation}) => {
@@ -30,6 +32,10 @@ export const MyPage: React.FC<Props> = ({navigation}) => {
     );
   }
 
+  function onPress(menu: any) {
+    // code ..
+  }
+
   return (
     <View style={GlobalStyles.root_container}>
       <NavigationBar
@@ -49,13 +55,33 @@ export const MyPage: React.FC<Props> = ({navigation}) => {
             />
             <Text>GitHub Popular</Text>
           </View>
-          <Ionicons
-            name="arrow-forward"
-            size={16}
-            style={{color: colors.primary, marginRight: 10, alignSelf: 'center'}}
-          />
+          <AntDesign name="right" size={16} style={{color: colors.primary, marginRight: 10, alignSelf: 'center'}} />
         </TouchableOpacity>
         <View style={GlobalStyles.line} />
+        <SettingItem {...MORE_MENU.Tutorial} onPress={() => {}} />
+        {/* 趋势管理 */}
+        <Text style={styles.groupTitle}>趋势管理</Text>
+        {/* 自定义语言 */}
+        <SettingItem {...MORE_MENU.Custom_Language} onPress={() => {}} />
+        {/* 语言排序 */}
+        <SettingItem {...MORE_MENU.Sort_Language} onPress={() => {}} />
+        {/* 最热管理 */}
+        <Text style={styles.groupTitle}>最热管理</Text>
+        {/* 自定义标签 */}
+        <SettingItem {...MORE_MENU.Custom_Key} onPress={() => {}} />
+        {/* 标签排序 */}
+        <SettingItem {...MORE_MENU.Sort_Key} onPress={() => {}} />
+        {/* 标签移除 */}
+        <SettingItem {...MORE_MENU.Remove_Key} onPress={() => {}} />
+
+        {/* 设置 */}
+        <Text style={styles.groupTitle}>设置</Text>
+        {/* 自定义主题 */}
+        <SettingItem {...MORE_MENU.Custom_Theme} onPress={() => {}} />
+        {/* 关于作者 */}
+        <SettingItem {...MORE_MENU.About_Author} onPress={() => {}} />
+        {/* 反馈 */}
+        <SettingItem {...MORE_MENU.Feedback} onPress={() => {}} />
       </ScrollView>
     </View>
   );
@@ -84,5 +110,12 @@ const styles = StyleSheet.create({
   about_left: {
     alignItems: 'center',
     flexDirection: 'row',
+  },
+  groupTitle: {
+    marginLeft: 10,
+    marginTop: 10,
+    marginBottom: 5,
+    fontSize: 12,
+    color: 'gray',
   },
 });
