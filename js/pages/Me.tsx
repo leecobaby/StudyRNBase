@@ -6,7 +6,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 
 import {ScreenProps} from '@/navigators/type';
 import {NavigationBar} from '@/components/NavigationBar';
-import {MORE_MENU} from '@/dao/MenuConst';
+import {MORE_MENU, MenuValue} from '@/dao/MenuConst';
 import {useTheme} from '@react-navigation/native';
 import {GlobalStyles} from '@/GlobalStyles';
 import {SettingItem} from '@/components/SettingItem';
@@ -32,8 +32,33 @@ export const MyPage: React.FC<Props> = ({navigation}) => {
     );
   }
 
-  function onPress(menu: any) {
-    // code ..
+  function onPress(menu: MenuValue) {
+    let routeName: string = '';
+    let params: {[key: string]: any} = {};
+    switch (menu) {
+      case MORE_MENU.Tutorial:
+        routeName = 'WebViewPage';
+        params.title = '教程';
+        params.url = 'https://github.com/leecobaby';
+        break;
+      case MORE_MENU.About:
+        routeName = 'AboutPage';
+        break;
+      case MORE_MENU.Custom_Theme:
+        // const {onShowCustomThemeView} = this.props;
+        // onShowCustomThemeView(true);
+        break;
+      case MORE_MENU.CodePush:
+        routeName = 'CodePushPage';
+        break;
+      case MORE_MENU.About_Author:
+        routeName = 'AboutMePage';
+        break;
+      default:
+        routeName = 'WebViewPage';
+        break;
+    }
+    navigation.navigate(routeName as any, params);
   }
 
   return (
@@ -46,7 +71,7 @@ export const MyPage: React.FC<Props> = ({navigation}) => {
         rightButton={<RightButton />}
       />
       <ScrollView>
-        <TouchableOpacity style={styles.item} onPress={() => {}}>
+        <TouchableOpacity style={styles.item} onPress={() => onPress(MORE_MENU.About)}>
           <View style={styles.about_left}>
             <Ionicons
               name={MORE_MENU.About.icon}
@@ -58,7 +83,7 @@ export const MyPage: React.FC<Props> = ({navigation}) => {
           <AntDesign name="right" size={16} style={{color: colors.primary, marginRight: 10, alignSelf: 'center'}} />
         </TouchableOpacity>
         <View style={GlobalStyles.line} />
-        <SettingItem {...MORE_MENU.Tutorial} onPress={() => {}} />
+        <SettingItem {...MORE_MENU.Tutorial} onPress={() => onPress(MORE_MENU.Tutorial)} />
         {/* 趋势管理 */}
         <Text style={styles.groupTitle}>趋势管理</Text>
         {/* 自定义语言 */}

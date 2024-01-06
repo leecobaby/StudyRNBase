@@ -23,6 +23,7 @@ export type RootStackParamList = {
   FavoritePage: undefined;
   MyPage: undefined;
   Detail: DetailPageParams;
+  WebViewPage: {url: string; title: string; canGoBack: boolean};
 };
 
 export type DrawerParamList = {

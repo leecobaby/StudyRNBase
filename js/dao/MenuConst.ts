@@ -5,7 +5,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Foundation from 'react-native-vector-icons/Foundation';
 
 export const MORE_MENU = {
-  Custom_Language: {name: '自定义语言', Icons: Ionicons, icon: 'md-checkbox-outline'},
+  Custom_Language: {name: '自定义语言', Icons: MaterialCommunityIcons, icon: 'checkbox-marked-outline'},
   Sort_Language: {name: '语言排序', Icons: MaterialCommunityIcons, icon: 'sort'},
   Custom_Theme: {name: '自定义主题', Icons: Ionicons, icon: 'color-palette'},
   Custom_Key: {name: '自定义标签', Icons: MaterialCommunityIcons, icon: 'checkbox-marked-outline'},
