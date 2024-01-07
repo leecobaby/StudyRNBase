@@ -25,6 +25,7 @@
     "react-native-gesture-handler": "^2.12.1",
     "react-native-htmlview": "^0.17.0",
     "react-native-pager-view": "^6.2.1",
+    "react-native-parallax-scroll-view": "^0.21.3",
     "react-native-reanimated": "^3.4.2",
     "react-native-safe-area-context": "^4.7.2",
     "react-native-screens": "^3.25.0",

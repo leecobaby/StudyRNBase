@@ -7032,7 +7032,7 @@ promzard@^1.0.0:
   dependencies:
     read "^2.0.0"
 
-prop-types@*, prop-types@^15.7.2, prop-types@^15.8.1:
+prop-types@*, prop-types@^15.6.0, prop-types@^15.7.2, prop-types@^15.8.1:
   version "15.8.1"
   resolved "https://registry.npmmirror.com/prop-types/-/prop-types-15.8.1.tgz"
   integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
@@ -7143,6 +7143,13 @@ react-native-pager-view@*, react-native-pager-view@^6.2.1, "react-native-pager-v
   version "6.2.1"
   resolved "https://registry.npmmirror.com/react-native-pager-view/-/react-native-pager-view-6.2.1.tgz"
   integrity sha512-fZ8chez5J+w831nSnbtK8hwlCiMy1DgpFv8xG6ajXLsAI8uMkGvP554QDIDNlUoCuVwMf7OFyd32Y2Nm2Iaj9Q==
+
+react-native-parallax-scroll-view@^0.21.3:
+  version "0.21.3"
+  resolved "https://registry.npmmirror.com/react-native-parallax-scroll-view/-/react-native-parallax-scroll-view-0.21.3.tgz"
+  integrity sha512-oVbZPijNGYGcpU2z7k/ZOOnl0vYxch7qtVvaJpH4+wLVnEP49NC2diCzjFGz8PE0yEcgyeTdkpdUK8RTD3QEew==
+  dependencies:
+    prop-types "^15.6.0"
 
 react-native-reanimated@^3.4.2, "react-native-reanimated@>= 1.0.0":
   version "3.4.2"
