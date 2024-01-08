@@ -8,6 +8,7 @@ import {WelcomePage} from '@/pages/Welcome';
 import {useWelcome} from '@/hooks/use-welcome';
 import {RootStackParamList, ScreenProps} from './type';
 import {WebViewPage} from '@/pages/WebViewPage';
+import {AboutPage} from '@/pages/about/AboutPage';
 
 const Stack = createStackNavigator<RootStackParamList>();
 const NativeStack = createNativeStackNavigator<RootStackParamList>();
@@ -27,6 +28,7 @@ const MainNavigator: React.FC<MainNavigatorProps> = ({navigation}) => {
       <Stack.Screen name="Home" component={Home} options={{header: () => null}} />
       <Stack.Screen name="Detail" component={Detail} options={{header: () => null}} />
       <Stack.Screen name="WebViewPage" component={WebViewPage} options={{header: () => null}} />
+      <Stack.Screen name="AboutPage" component={AboutPage} options={{header: () => null}} />
     </Stack.Navigator>
   );
 };

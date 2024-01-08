@@ -24,6 +24,7 @@ export type RootStackParamList = {
   MyPage: undefined;
   Detail: DetailPageParams;
   WebViewPage: {url: string; title: string; canGoBack: boolean};
+  AboutPage: undefined;
 };
 
 export type DrawerParamList = {

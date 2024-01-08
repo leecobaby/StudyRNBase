@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {Dimensions, Image, Platform, StyleSheet, Text, View} from 'react-native';
 import {useNavigation, useTheme} from '@react-navigation/native';
 // @ts-ignore
@@ -20,13 +20,13 @@ const STICKY_HEADER_HEIGHT =
 
 interface Props {
   flagAbout: string;
-  updateState: (params: any) => void;
+  params: any;
+  children?: React.ReactNode;
 }
 
-export function AboutBase(props: Props) {
+export function AboutBase({params, flagAbout, children}: Props) {
   const navigation = useNavigation();
   const {colors} = useTheme();
-  props.updateState({data});
   useBackHandler(onBackPress);
 
   function onBackPress() {
@@ -39,7 +39,7 @@ export function AboutBase(props: Props) {
   }
 
   // ... 其他函数和渲染逻辑
-  function getParallaxRenderConfig(params: any) {
+  function getParallaxRenderConfig() {
     let config = {} as {[key: string]: any};
     let avatar = typeof params.avatar === 'string' ? {uri: params.avatar} : params.avatar;
     config.renderBackground = () => (
@@ -69,6 +69,8 @@ export function AboutBase(props: Props) {
     return config;
   }
 
+  const parallaxRenderConfig = useMemo(getParallaxRenderConfig, [params]);
+
   return (
     <>
       <ParallaxScrollView
@@ -77,8 +79,8 @@ export function AboutBase(props: Props) {
         parallaxHeaderHeight={PARALLAX_HEADER_HEIGHT}
         stickyHeaderHeight={STICKY_HEADER_HEIGHT}
         backgroundScrollSpeed={10}
-        {...getParallaxRenderConfig({})}>
-        demo
+        {...parallaxRenderConfig}>
+        {children}
       </ParallaxScrollView>
     </>
   );
