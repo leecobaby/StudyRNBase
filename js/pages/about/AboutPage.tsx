@@ -1,13 +1,13 @@
 import React from 'react';
-import {View, Text, StyleSheet, Button, ScrollView, TouchableOpacity} from 'react-native';
+import {Linking} from 'react-native';
 import {useTheme} from '@react-navigation/native';
 
 import {ScreenProps} from '@/navigators/type';
 import {MORE_MENU, MenuValue} from '@/dao/MenuConst';
-import {GlobalStyles} from '@/GlobalStyles';
 import {AboutBase, FLAG_ABOUT} from './AboutBase';
 import data from '@/assets/about.json';
 import {SettingItem} from '@/components/SettingItem';
+import {DropDownMenu} from '@/components/DropDownMenu';
 
 type Props = ScreenProps<'AboutPage'>;
 export function AboutPage({navigation, route}: Props) {
@@ -24,34 +24,39 @@ export function AboutPage({navigation, route}: Props) {
         params.title = '教程';
         params.url = 'https://github.com/leecobaby';
         break;
-      case MORE_MENU.About:
-        routeName = 'AboutPage';
-        break;
-      case MORE_MENU.Custom_Theme:
-        // const {onShowCustomThemeView} = this.props;
-        // onShowCustomThemeView(true);
-        break;
-      case MORE_MENU.CodePush:
-        routeName = 'CodePushPage';
+      case MORE_MENU.Feedback:
+        const url = 'mailto:leeco1917@gmail.com';
+        Linking.canOpenURL(url)
+          .then(support => {
+            if (!support) {
+              console.log("Can't handle url: " + url);
+            } else {
+              Linking.openURL(url);
+            }
+          })
+          .catch(e => console.error('An error occurred', e));
         break;
       case MORE_MENU.About_Author:
         routeName = 'AboutMePage';
         break;
-      default:
-        routeName = 'WebViewPage';
-        break;
     }
-    navigation.navigate(routeName as any, params);
+    if (routeName) {
+      navigation.navigate(routeName as any, params);
+    }
+  }
+
+  function Item({menu}: {menu: MenuValue}) {
+    return <SettingItem {...menu} onPress={() => onPress(menu)} />;
   }
 
   return (
     <AboutBase params={params} flagAbout={flagAbout}>
       {/* 教程 */}
-      <SettingItem {...MORE_MENU.Tutorial} onPress={() => {}} />
+      <Item menu={MORE_MENU.Tutorial} />
       {/* 关于作者 */}
-      <SettingItem {...MORE_MENU.About_Author} onPress={() => {}} />
+      <Item menu={MORE_MENU.About_Author} />
       {/* 反馈 */}
-      <SettingItem {...MORE_MENU.Feedback} onPress={() => {}} />
+      <Item menu={MORE_MENU.Feedback} />
     </AboutBase>
   );
 }

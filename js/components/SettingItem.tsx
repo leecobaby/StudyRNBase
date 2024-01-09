@@ -4,13 +4,14 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 interface SettingItemProps {
-  name: string;
-  Icons: any;
-  icon: string;
+  name?: string;
+  title?: string;
+  Icons?: any;
+  icon?: string;
   onPress?: () => void;
 }
 
-export function SettingItem({name, Icons, icon, onPress}: SettingItemProps) {
+export function SettingItem({name, title, Icons, icon, onPress}: SettingItemProps) {
   const {colors} = useTheme();
   return (
     <TouchableOpacity style={styles.setting_item_container} onPress={onPress}>
@@ -20,7 +21,7 @@ export function SettingItem({name, Icons, icon, onPress}: SettingItemProps) {
         ) : (
           <View style={styles.card} />
         )}
-        <Text>{name}</Text>
+        <Text>{name || title}</Text>
       </View>
       <AntDesign name="right" size={16} style={{color: colors.primary, marginRight: 10, alignSelf: 'center'}} />
     </TouchableOpacity>

@@ -16,7 +16,7 @@
     },
     "Blog": {
       "name": "技术博客",
-      "icon": "ios-laptop",
+      "icon": "laptop-outline",
       "items": [
         {
           "title": "个人博客",
@@ -42,21 +42,21 @@
     },
     "Contact": {
       "name": "联系方式",
-      "icon": "ios-contacts",
+      "icon": "user-group",
       "items": {
         "QQ": {
           "title": "QQ",
-          "account": "1586866509"
+          "account": "1917019372"
         },
         "Email": {
           "title": "Email",
-          "account": "crazycodeboy@gmail.com"
+          "account": "leeco1917@gmail.com"
         }
       }
     },
     "QQ": {
       "name": "技术交流群",
-      "icon": "ios-chatbubbles",
+      "icon": "logo-wechat",
       "items": [
         {
           "title": "移动开发者技术分享群",

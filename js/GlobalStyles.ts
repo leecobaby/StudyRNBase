@@ -1,7 +1,7 @@
 const BackgroundColor = '#F5FCFF';
 export const GlobalStyles = {
   line: {
-    height: 0.5,
+    height: 1,
     opacity: 0.5,
     backgroundColor: 'darkgray',
   },

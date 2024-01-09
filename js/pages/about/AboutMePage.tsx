@@ -1,23 +1,19 @@
 import React from 'react';
-import {View, Text, StyleSheet, Button, ScrollView, TouchableOpacity} from 'react-native';
-import Feather from 'react-native-vector-icons/Feather';
+import {Linking} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import AntDesign from 'react-native-vector-icons/AntDesign';
+import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 
 import {ScreenProps} from '@/navigators/type';
-import {NavigationBar} from '@/components/NavigationBar';
 import {MORE_MENU, MenuValue} from '@/dao/MenuConst';
-import {useTheme} from '@react-navigation/native';
-import {GlobalStyles} from '@/GlobalStyles';
-import {SettingItem} from '@/components/SettingItem';
 import {AboutBase, FLAG_ABOUT} from './AboutBase';
 import data from '@/assets/about.json';
+import {SettingItem} from '@/components/SettingItem';
+import {DropDownMenu} from '@/components/DropDownMenu';
 
-type Props = ScreenProps<'AboutPage'>;
+type Props = ScreenProps<'AboutMePage'>;
 export function AboutMePage({navigation, route}: Props) {
-  const {colors} = useTheme();
-  const params = data.app;
-  const flagAbout = FLAG_ABOUT.flag_about;
+  const params = data.author;
+  const flagAbout = FLAG_ABOUT.flag_about_me;
 
   function onPress(menu: MenuValue) {
     let routeName: string = '';
@@ -28,62 +24,58 @@ export function AboutMePage({navigation, route}: Props) {
         params.title = '教程';
         params.url = 'https://github.com/leecobaby';
         break;
-      case MORE_MENU.About:
-        routeName = 'AboutPage';
-        break;
-      case MORE_MENU.Custom_Theme:
-        // const {onShowCustomThemeView} = this.props;
-        // onShowCustomThemeView(true);
-        break;
-      case MORE_MENU.CodePush:
-        routeName = 'CodePushPage';
+      case MORE_MENU.Feedback:
+        const url = 'mailto:leeco1917@gmail.com';
+        Linking.canOpenURL(url)
+          .then(support => {
+            if (!support) {
+              console.log("Can't handle url: " + url);
+            } else {
+              Linking.openURL(url);
+            }
+          })
+          .catch(e => console.error('An error occurred', e));
         break;
       case MORE_MENU.About_Author:
         routeName = 'AboutMePage';
         break;
-      default:
-        routeName = 'WebViewPage';
-        break;
     }
-    navigation.navigate(routeName as any, params);
+    if (routeName) {
+      navigation.navigate(routeName as any, params);
+    }
+  }
+
+  function Item({menu}: {menu: any}) {
+    let name = menu.name || menu.title;
+    if (menu.account) {
+      name += `:${menu.account}`;
+    }
+    return <SettingItem {...menu} name={name} onPress={() => onPress(menu)} />;
   }
 
   return (
-    <View style={GlobalStyles.root_container}>
-      <AboutBase params={params} flagAbout={flagAbout} />
-    </View>
+    <AboutBase params={params} flagAbout={flagAbout}>
+      <DropDownMenu {...MORE_MENU.Tutorial}>
+        {data.aboutMe.Tutorial.items.map((item, index) => (
+          <Item key={index} menu={item} />
+        ))}
+      </DropDownMenu>
+      <DropDownMenu name={data.aboutMe.Blog.name} Icons={Ionicons} icon={data.aboutMe.Blog.icon}>
+        {data.aboutMe.Blog.items.map((item, index) => (
+          <Item key={index} menu={item} />
+        ))}
+      </DropDownMenu>
+      <DropDownMenu name={data.aboutMe.QQ.name} Icons={Ionicons} icon={data.aboutMe.QQ.icon}>
+        {data.aboutMe.QQ.items.map((item, index) => (
+          <Item key={index} menu={item} />
+        ))}
+      </DropDownMenu>
+      <DropDownMenu name={data.aboutMe.Contact.name} Icons={FontAwesome6} icon={data.aboutMe.Contact.icon}>
+        {Object.keys(data.aboutMe.Contact.items).map((key, index) => (
+          // @ts-ignore
+          <Item key={index} menu={data.aboutMe.Contact.items[key]} />
+        ))}
+      </DropDownMenu>
+    </AboutBase>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f5fcff',
-  },
-  text: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  item: {
-    backgroundColor: 'white',
-    padding: 10,
-    height: 90,
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-  },
-  about_left: {
-    alignItems: 'center',
-    flexDirection: 'row',
-  },
-  groupTitle: {
-    marginLeft: 10,
-    marginTop: 10,
-    marginBottom: 5,
-    fontSize: 12,
-    color: 'gray',
-  },
-});
