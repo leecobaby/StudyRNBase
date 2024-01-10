@@ -11,6 +11,8 @@ import {useAppDispatch, useAppSelector} from '@/hooks/store';
 import {fetchPopularData, selectPopular} from '@/store/popularSlice';
 import {ScreenProps} from '@/navigators/type';
 import {Flag} from '@/types/enum';
+import {fetchLangData} from '@/store/langSlice';
+import {FlagLang} from '@/dao/LanguageDao';
 
 type Props = ScreenProps<'PopularPage'>;
 type NavigationProp = Props['navigation'];
@@ -20,7 +22,17 @@ const QUERY_STR = '&sort=stars';
 const tabNames = ['Java', 'Android', 'iOS', 'React', 'React Native', 'PHP'];
 
 export const PopularPage: React.FC = () => {
+  const dispatch = useAppDispatch();
   const {colors} = useTheme();
+  const keys = useAppSelector(state => state.lang.popular);
+  const loadData = () => {
+    dispatch(fetchLangData({flagLang: FlagLang.Popular}));
+  };
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
   return (
     <View style={{flex: 1}}>
       <NavigationBar
@@ -38,21 +50,24 @@ export const PopularPage: React.FC = () => {
           </View>
         }
       />
-      <Tab.Navigator
-        screenOptions={{
-          lazy: true,
-          tabBarScrollEnabled: true,
-          tabBarStyle: [styles.tabBarStyle, {backgroundColor: colors.primary}],
-          tabBarItemStyle: styles.tabBarItemStyle,
-          tabBarLabelStyle: styles.tabBarLabelStyle,
-          tabBarIndicatorStyle: styles.tabBarIndicatorStyle,
-        }}
-        initialRouteName={'Java'}>
-        {tabNames.map((item, index) => (
-          // 传递参数给 PopularTabPage
-          <Tab.Screen key={index} name={item} component={PopularTabPage} />
-        ))}
-      </Tab.Navigator>
+      {keys.length === 0 ? null : (
+        <Tab.Navigator
+          screenOptions={{
+            lazy: true,
+            tabBarScrollEnabled: true,
+            tabBarStyle: [styles.tabBarStyle, {backgroundColor: colors.primary}],
+            tabBarItemStyle: styles.tabBarItemStyle,
+            tabBarLabelStyle: styles.tabBarLabelStyle,
+            tabBarIndicatorStyle: styles.tabBarIndicatorStyle,
+          }}
+          initialRouteName={'ALL'}>
+          {keys
+            .filter(item => item.checked)
+            .map((item, index) => (
+              <Tab.Screen key={index} name={item.name} component={PopularTabPage} />
+            ))}
+        </Tab.Navigator>
+      )}
     </View>
   );
 };

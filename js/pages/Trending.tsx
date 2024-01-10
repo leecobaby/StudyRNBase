@@ -13,6 +13,8 @@ import {TrendingDialog} from '@/components/TrendingDialog';
 import {fetchTrendingData, selectTrending} from '@/store/trendingSlice';
 import {ScreenProps} from '@/navigators/type';
 import {Flag} from '@/types/enum';
+import {fetchLangData} from '@/store/langSlice';
+import {FlagLang} from '@/dao/LanguageDao';
 export type TimeSpan = {
   title: string;
   value: string;
@@ -34,6 +36,15 @@ export const TrendingPage: React.FC = () => {
   const {colors} = useTheme();
   const [visible, setVisible] = useState(false);
   const [timespan, setTimespan] = useState<TimeSpan>(timespans[0]);
+  const dispatch = useAppDispatch();
+  const keys = useAppSelector(state => state.lang.trending);
+  const loadData = () => {
+    dispatch(fetchLangData({flagLang: FlagLang.Trending}));
+  };
+
+  useEffect(() => {
+    loadData();
+  }, []);
 
   function TitleView() {
     return (
@@ -58,21 +69,28 @@ export const TrendingPage: React.FC = () => {
         style={{backgroundColor: colors.primary}}
         titleView={<TitleView />}
       />
-      <Tab.Navigator
-        screenOptions={{
-          lazy: true,
-          tabBarScrollEnabled: true,
-          tabBarStyle: [styles.tabBarStyle, {backgroundColor: colors.primary}],
-          tabBarItemStyle: styles.tabBarItemStyle,
-          tabBarLabelStyle: styles.tabBarLabelStyle,
-          tabBarIndicatorStyle: styles.tabBarIndicatorStyle,
-        }}
-        initialRouteName={'All'}>
-        {tabNames.map((item, index) => (
-          // 传递参数给 TrendingTabPage
-          <Tab.Screen key={index} name={item} children={props => <TrendingTabPage {...props} timespan={timespan} />} />
-        ))}
-      </Tab.Navigator>
+      {keys.length === 0 ? null : (
+        <Tab.Navigator
+          screenOptions={{
+            lazy: true,
+            tabBarScrollEnabled: true,
+            tabBarStyle: [styles.tabBarStyle, {backgroundColor: colors.primary}],
+            tabBarItemStyle: styles.tabBarItemStyle,
+            tabBarLabelStyle: styles.tabBarLabelStyle,
+            tabBarIndicatorStyle: styles.tabBarIndicatorStyle,
+          }}
+          initialRouteName={'All'}>
+          {keys
+            .filter(item => item.checked)
+            .map((item, index) => (
+              <Tab.Screen
+                key={index}
+                name={item.name}
+                children={props => <TrendingTabPage {...props} timespan={timespan} />}
+              />
+            ))}
+        </Tab.Navigator>
+      )}
       <TrendingDialog visible={visible} onClose={() => setVisible(false)} onSelect={onSelectTimeSpan} />
     </View>
   );

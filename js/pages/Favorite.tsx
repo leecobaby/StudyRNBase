@@ -16,9 +16,6 @@ import {TrendingItem} from '@/components/TrendingItem';
 type Props = ScreenProps<'PopularPage'>;
 type NavigationProp = Props['navigation'];
 
-const URL = 'https://api.github.com/search/repositories?q=';
-const QUERY_STR = '&sort=stars';
-
 export const FavoritePage: React.FC = () => {
   const {colors} = useTheme();
   const bgColorStyle = {backgroundColor: colors.primary};

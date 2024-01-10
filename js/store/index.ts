@@ -7,6 +7,7 @@ import {trendingReducer} from './trendingSlice';
 import {logger} from './middlewares/logger';
 import {favoriteReducer} from './favoriteSlice';
 import {updateReducer} from './updateSlice';
+import {langReducer} from './langSlice';
 
 export const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ export const store = configureStore({
     trending: trendingReducer,
     favorite: favoriteReducer,
     update: updateReducer,
+    lang: langReducer,
   },
   middleware: getDefaultMiddleware => getDefaultMiddleware().concat(logger),
 });

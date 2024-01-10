@@ -8,6 +8,10 @@ import {AppNavigators} from './navigators/AppNavigators';
 import {WelcomeContextProvider} from './hooks/use-welcome';
 import {NavigationContainer} from './navigators/NavigationContainer';
 
+// clean storage
+// import AsyncStorage from '@react-native-async-storage/async-storage';
+// AsyncStorage.clear();
+
 function App(): JSX.Element {
   return (
     <Provider store={store}>

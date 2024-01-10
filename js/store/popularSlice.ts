@@ -1,20 +1,18 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 
 import {RootState} from './index';
-import {CachedData, fetchData} from '@/dao/DataStore';
 import {Flag} from '@/types/enum';
+import {fetchData} from '@/dao/DataStore';
 import {wrapFavorite} from '@/dao/FavoriteDao';
 
 export interface PopularItemType extends GitHubRepo {
   isFavorite: boolean;
 }
 
-type Items = PopularItemType[] | null;
-
 interface State {
   [key: string]: {
     loading: boolean;
-    items: Items;
+    items: PopularItemType[] | null;
     error?: string;
   };
 }
