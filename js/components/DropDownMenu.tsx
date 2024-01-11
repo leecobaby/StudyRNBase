@@ -9,7 +9,6 @@ interface Props {
   Icons: any;
   icon: string;
   children?: React.ReactNode;
-  
 }
 
 export function DropDownMenu({name, Icons, icon, children}: Props) {
@@ -65,11 +64,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   subMenu: {
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
     elevation: 5,
-    margin: 1.5,
+    margin: 2,
   },
 });

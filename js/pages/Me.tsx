@@ -10,6 +10,7 @@ import {MORE_MENU, MenuValue} from '@/dao/MenuConst';
 import {useTheme} from '@react-navigation/native';
 import {GlobalStyles} from '@/GlobalStyles';
 import {SettingItem} from '@/components/SettingItem';
+import {FlagLang} from '@/dao/LanguageDao';
 
 type Props = ScreenProps<'MyPage'>;
 export const MyPage: React.FC<Props> = ({navigation}) => {
@@ -84,16 +85,23 @@ export const MyPage: React.FC<Props> = ({navigation}) => {
         </TouchableOpacity>
         <View style={GlobalStyles.line} />
         <SettingItem {...MORE_MENU.Tutorial} onPress={() => onPress(MORE_MENU.Tutorial)} />
+
         {/* 趋势管理 */}
         <Text style={styles.groupTitle}>趋势管理</Text>
-        {/* 自定义语言 */}
-        <SettingItem {...MORE_MENU.Custom_Language} onPress={() => {}} />
+        {/* 自定义标签 */}
+        <SettingItem
+          {...MORE_MENU.Custom_Language}
+          onPress={() => {
+            navigation.navigate('CustomKeyPage', {flagLang: FlagLang.Trending, isRemoveKey: false});
+          }}
+        />
         {/* 语言排序 */}
         <SettingItem {...MORE_MENU.Sort_Language} onPress={() => {}} />
+
         {/* 最热管理 */}
         <Text style={styles.groupTitle}>最热管理</Text>
         {/* 自定义标签 */}
-        <SettingItem {...MORE_MENU.Custom_Key} onPress={() => {}} />
+        <SettingItem {...MORE_MENU.Custom_Key} />
         {/* 标签排序 */}
         <SettingItem {...MORE_MENU.Sort_Key} onPress={() => {}} />
         {/* 标签移除 */}

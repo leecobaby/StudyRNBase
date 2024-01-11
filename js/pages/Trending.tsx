@@ -29,7 +29,6 @@ type Props = ScreenProps<'TrendingPage'>;
 type NavigationProp = Props['navigation'];
 
 const URL = 'https://github.com/trending';
-const tabNames = ['All', 'Java', 'C', 'C#', 'Go', 'Dart'];
 const THEME_COLOR = '#a67';
 
 export const TrendingPage: React.FC = () => {

@@ -1,10 +1,9 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useMemo} from 'react';
 import {Dimensions, Image, Platform, StyleSheet, Text, View} from 'react-native';
 import {useNavigation, useTheme} from '@react-navigation/native';
 // @ts-ignore
 import ParallaxScrollView from 'react-native-parallax-scroll-view';
 
-import data from '@/assets/about.json';
 import {GlobalStyles} from '@/GlobalStyles';
 import {LeftBackButton} from '@/components/LeftBackButton';
 import {useBackHandler} from '@/hooks/use-backhandler';

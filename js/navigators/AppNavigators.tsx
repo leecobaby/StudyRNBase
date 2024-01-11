@@ -10,6 +10,7 @@ import {RootStackParamList, ScreenProps} from './type';
 import {WebViewPage} from '@/pages/WebViewPage';
 import {AboutPage} from '@/pages/about/AboutPage';
 import {AboutMePage} from '@/pages/about/AboutMePage';
+import {CustomKeyPage} from '@/pages/CustomKeyPage';
 
 const Stack = createStackNavigator<RootStackParamList>();
 const NativeStack = createNativeStackNavigator<RootStackParamList>();
@@ -31,6 +32,7 @@ const MainNavigator: React.FC<MainNavigatorProps> = ({navigation}) => {
       <Stack.Screen name="WebViewPage" component={WebViewPage} options={{header: () => null}} />
       <Stack.Screen name="AboutPage" component={AboutPage} options={{header: () => null}} />
       <Stack.Screen name="AboutMePage" component={AboutMePage} options={{header: () => null}} />
+      <Stack.Screen name="CustomKeyPage" component={CustomKeyPage} options={{header: () => null}} />
     </Stack.Navigator>
   );
 };

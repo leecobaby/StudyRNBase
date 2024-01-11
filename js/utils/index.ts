@@ -11,7 +11,7 @@ export function isGitHubTrendingRepo(item: GitHubRepo | GitHubTrendingRepo): ite
   return (item as GitHubTrendingRepo).fullName !== undefined;
 }
 
-const actionMap = {
+const actionMap: Record<Flag | 'favorite', any> = {
   favorite: toggleFavoriteInFavorite,
   [Flag.popular]: toggleFavoriteInPopular,
   [Flag.trending]: toggleFavoriteInTrending,

@@ -19,7 +19,6 @@ type NavigationProp = Props['navigation'];
 
 const URL = 'https://api.github.com/search/repositories?q=';
 const QUERY_STR = '&sort=stars';
-const tabNames = ['Java', 'Android', 'iOS', 'React', 'React Native', 'PHP'];
 
 export const PopularPage: React.FC = () => {
   const dispatch = useAppDispatch();

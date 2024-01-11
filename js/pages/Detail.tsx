@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, StyleSheet, TouchableOpacity, Linking} from 'react-native';
+import {View, StyleSheet, TouchableOpacity} from 'react-native';
 import FontAwesom from 'react-native-vector-icons/FontAwesome';
 
 import {ScreenProps} from '@/navigators/type';
@@ -12,7 +12,6 @@ import {useBackHandler} from '@/hooks/use-backhandler';
 import {isGitHubRepo} from '@/utils';
 import {getDispatchAction} from '@/utils';
 import {onFavorite} from '@/dao/FavoriteDao';
-import {Flag} from '@/types/enum';
 
 type Props = ScreenProps<'Detail'>;
 

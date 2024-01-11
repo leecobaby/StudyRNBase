@@ -5,6 +5,7 @@ import {Flag} from '@/types/enum';
 import {PopularItemType} from '@/store/popularSlice';
 import {TrendingItemType} from '@/store/trendingSlice';
 import {FavoriteItemType} from '@/store/favoriteSlice';
+import {FlagLang} from '@/dao/LanguageDao';
 
 type DetailPageParams = {
   item: PopularItemType | TrendingItemType | FavoriteItemType;
@@ -26,6 +27,7 @@ export type RootStackParamList = {
   WebViewPage: {url: string; title: string; canGoBack: boolean};
   AboutPage: undefined;
   AboutMePage: undefined;
+  CustomKeyPage: {flagLang: FlagLang; isRemoveKey: boolean};
 };
 
 export type DrawerParamList = {
