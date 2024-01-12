@@ -30,6 +30,8 @@ export type RootStackParamList = {
   CustomKeyPage: {flagLang: FlagLang; isRemoveKey: boolean};
 };
 
+export type RootStackKey = keyof RootStackParamList;
+
 export type DrawerParamList = {
   DrawerPage: undefined;
 };

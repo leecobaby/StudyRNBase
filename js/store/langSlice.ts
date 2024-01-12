@@ -7,8 +7,8 @@ import {wrapFavorite} from '@/dao/FavoriteDao';
 import {FlagLang, LanguageDao} from '@/dao/LanguageDao';
 
 interface State {
-  popular: Langs;
-  trending: Langs;
+  popular: Lang[];
+  trending: Lang[];
 }
 
 const initialState: State = {
@@ -33,7 +33,7 @@ const langSlice = createSlice({
   },
 });
 
-export const fetchLangData = createAsyncThunk<Langs, {flagLang: FlagLang}>('lang/fetchLangData', arg => {
+export const fetchLangData = createAsyncThunk<Lang[], {flagLang: FlagLang}>('lang/fetchLangData', arg => {
   return LanguageDao.fetch(arg.flagLang)
     .then(res => {
       if (!res) throw new Error('responseData is null');

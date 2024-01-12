@@ -8,7 +8,7 @@ export enum FlagLang {
   Trending = 'language_trending',
 }
 
-async function save(flag: FlagLang, data: Langs) {
+async function save(flag: FlagLang, data: Lang[]) {
   try {
     await AsyncStorage.setItem(flag, JSON.stringify(data));
   } catch (error) {
@@ -16,7 +16,7 @@ async function save(flag: FlagLang, data: Langs) {
   }
 }
 
-async function fetch(flag: FlagLang): Promise<Langs | undefined> {
+async function fetch(flag: FlagLang): Promise<Lang[] | undefined> {
   try {
     const result = await AsyncStorage.getItem(flag);
     if (result) {

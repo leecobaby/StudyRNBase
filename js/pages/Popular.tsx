@@ -27,6 +27,7 @@ export const PopularPage: React.FC = () => {
   const loadData = () => {
     dispatch(fetchLangData({flagLang: FlagLang.Popular}));
   };
+  console.log('keys', keys);
 
   useEffect(() => {
     loadData();

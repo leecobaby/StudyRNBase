@@ -6,11 +6,11 @@ import {Home} from '@/pages/Home';
 import {Detail} from '@/pages/Detail';
 import {WelcomePage} from '@/pages/Welcome';
 import {useWelcome} from '@/hooks/use-welcome';
-import {RootStackParamList, ScreenProps} from './type';
 import {WebViewPage} from '@/pages/WebViewPage';
 import {AboutPage} from '@/pages/about/AboutPage';
-import {AboutMePage} from '@/pages/about/AboutMePage';
 import {CustomKeyPage} from '@/pages/CustomKeyPage';
+import {AboutMePage} from '@/pages/about/AboutMePage';
+import {RootStackParamList, ScreenProps} from './type';
 
 const Stack = createStackNavigator<RootStackParamList>();
 const NativeStack = createNativeStackNavigator<RootStackParamList>();
