@@ -96,7 +96,12 @@ export const MyPage: React.FC<Props> = ({navigation}) => {
           }}
         />
         {/* 语言排序 */}
-        <SettingItem {...MORE_MENU.Sort_Language} onPress={() => {}} />
+        <SettingItem
+          {...MORE_MENU.Sort_Language}
+          onPress={() => {
+            navigation.navigate('SortKeyPage', {flagLang: FlagLang.Trending});
+          }}
+        />
 
         {/* 最热管理 */}
         <Text style={styles.groupTitle}>最热管理</Text>
@@ -108,7 +113,12 @@ export const MyPage: React.FC<Props> = ({navigation}) => {
           }}
         />
         {/* 标签排序 */}
-        <SettingItem {...MORE_MENU.Sort_Key} onPress={() => {}} />
+        <SettingItem
+          {...MORE_MENU.Sort_Key}
+          onPress={() => {
+            navigation.navigate('SortKeyPage', {flagLang: FlagLang.Popular});
+          }}
+        />
         {/* 标签移除 */}
         <SettingItem
           {...MORE_MENU.Remove_Key}

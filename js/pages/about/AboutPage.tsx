@@ -2,12 +2,11 @@ import React from 'react';
 import {Linking} from 'react-native';
 import {useTheme} from '@react-navigation/native';
 
-import {ScreenProps} from '@/navigators/type';
-import {MORE_MENU, MenuValue} from '@/dao/MenuConst';
-import {AboutBase, FLAG_ABOUT} from './AboutBase';
 import data from '@/assets/about.json';
+import {ScreenProps} from '@/navigators/type';
+import {AboutBase, FLAG_ABOUT} from './AboutBase';
+import {MORE_MENU, MenuValue} from '@/dao/MenuConst';
 import {SettingItem} from '@/components/SettingItem';
-import {DropDownMenu} from '@/components/DropDownMenu';
 
 type Props = ScreenProps<'AboutPage'>;
 export function AboutPage({navigation, route}: Props) {

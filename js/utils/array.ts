@@ -27,7 +27,21 @@ function remove<T extends object>(array: T[], item: T, key?: keyof T) {
   }
 }
 
+/**
+ * 判断两个数组的是否相等
+ */
+function isEqual(arr1: any[], arr2: any[]) {
+  if (!(arr1 && arr2)) return false;
+  if (arr1.length !== arr2.length) return false;
+  const len = arr1.length;
+  for (let i = 0; i < len; i++) {
+    if (arr1[i] !== arr2[i]) return false;
+  }
+  return true;
+}
+
 export const ArrayUtil = {
   updateArray,
   remove,
+  isEqual,
 };
