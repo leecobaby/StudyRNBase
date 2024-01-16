@@ -1,25 +1,37 @@
-import {createSlice} from '@reduxjs/toolkit';
-
-import {RootState} from './index';
-
-type ThemeState = {
-  dark: boolean;
-};
+import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
+import {ThemeFlags, getThemeFlag} from '@/dao/ThemeDao';
 
 const initialState = {
-  dark: false,
-} as ThemeState;
+  theme: ThemeFlags.Default,
+  onShowCustomThemeView: false,
+};
+
+type toggleThemeAction = {
+  payload: ThemeFlags;
+};
 
 const themeSlice = createSlice({
   name: 'theme',
   initialState,
   reducers: {
-    toggleTheme(state) {
-      state.dark = !state.dark;
+    toggleTheme(state, action: toggleThemeAction) {
+      state.theme = action.payload;
+      state.onShowCustomThemeView = !state.onShowCustomThemeView;
+    },
+    toggleCustomThemeView(state) {
+      state.onShowCustomThemeView = !state.onShowCustomThemeView;
+    },
+    onThemeChange(state, action: toggleThemeAction) {
+      state.theme = action.payload;
     },
   },
 });
 
-export const {toggleTheme} = themeSlice.actions;
+export const fetchTheme = createAsyncThunk('theme/fetchTheme', (_, {dispatch}) => {
+  return getThemeFlag().then(res => {
+    dispatch(onThemeChange(res));
+  });
+});
+
 export const themeReducer = themeSlice.reducer;
-export const selectDark = (state: RootState) => state.theme.dark;
+export const {toggleTheme, toggleCustomThemeView, onThemeChange} = themeSlice.actions;

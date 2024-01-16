@@ -1,9 +1,6 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 
 import {RootState} from './index';
-import {CachedData, fetchData} from '@/dao/DataStore';
-import {Flag} from '@/types/enum';
-import {wrapFavorite} from '@/dao/FavoriteDao';
 import {FlagLang, LanguageDao} from '@/dao/LanguageDao';
 
 interface State {

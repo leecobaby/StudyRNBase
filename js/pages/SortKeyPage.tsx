@@ -1,11 +1,9 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useTheme} from '@react-navigation/native';
-import {FlatList} from 'react-native-gesture-handler';
 import {View, Text, StyleSheet, Alert, TouchableOpacity} from 'react-native';
 import DraggableFlatList, {RenderItemParams, ScaleDecorator} from 'react-native-draggable-flatlist';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-import {ArrayUtil} from '@/utils/array';
 import {ScreenProps} from '@/navigators/type';
 import {fetchLangData} from '@/store/langSlice';
 import {FlagLang, LanguageDao} from '@/dao/LanguageDao';

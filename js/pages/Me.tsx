@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -7,17 +7,31 @@ import {View, Text, StyleSheet, ScrollView, TouchableOpacity} from 'react-native
 import {FlagLang} from '@/dao/LanguageDao';
 import {GlobalStyles} from '@/GlobalStyles';
 import {useTheme} from '@react-navigation/native';
+import {CustomTheme} from '@/components/CustomTheme';
 import {SettingItem} from '@/components/SettingItem';
 import {MORE_MENU, MenuValue} from '@/dao/MenuConst';
 import {NavigationBar} from '@/components/NavigationBar';
+import {toggleCustomThemeView} from '@/store/themeSlice';
 import {RootStackKey, ScreenProps} from '@/navigators/type';
+import {useAppDispatch, useAppSelector} from '@/hooks/store';
 
 type Props = ScreenProps<'MyPage'>;
 export const MyPage: React.FC<Props> = ({navigation}) => {
   const {colors} = useTheme();
+  const dispatch = useAppDispatch();
+  const onShowCustomThemeView = useAppSelector(state => state.theme.onShowCustomThemeView);
+  const [visible, setVisible] = useState(onShowCustomThemeView);
+
+  useEffect(() => setVisible(onShowCustomThemeView), [onShowCustomThemeView]);
+
   const navBarColorStyle = {
     backgroundColor: colors.primary,
   };
+
+  const onClose = useCallback(() => {
+    dispatch(toggleCustomThemeView());
+  }, []);
+
   function LightButton() {
     return (
       <View style={{padding: 8, paddingLeft: 12}}>
@@ -46,8 +60,7 @@ export const MyPage: React.FC<Props> = ({navigation}) => {
         routeName = 'AboutPage';
         break;
       case MORE_MENU.Custom_Theme:
-        // const {onShowCustomThemeView} = this.props;
-        // onShowCustomThemeView(true);
+        dispatch(toggleCustomThemeView());
         break;
       case MORE_MENU.About_Author:
         routeName = 'AboutMePage';
@@ -130,12 +143,14 @@ export const MyPage: React.FC<Props> = ({navigation}) => {
         {/* 设置 */}
         <Text style={styles.groupTitle}>设置</Text>
         {/* 自定义主题 */}
-        <SettingItem {...MORE_MENU.Custom_Theme} onPress={() => {}} />
+        <SettingItem {...MORE_MENU.Custom_Theme} onPress={() => onPress(MORE_MENU.Custom_Theme)} />
         {/* 关于作者 */}
         <SettingItem {...MORE_MENU.About_Author} onPress={() => {}} />
         {/* 反馈 */}
         <SettingItem {...MORE_MENU.Feedback} onPress={() => {}} />
       </ScrollView>
+
+      <CustomTheme visible={visible} onClose={onClose} />
     </View>
   );
 };

@@ -1,11 +1,28 @@
-import React from 'react';
-import {DarkTheme, DefaultTheme, NavigationContainer as _NavigationContainer} from '@react-navigation/native';
+import React, {useEffect, useState} from 'react';
+import {DefaultTheme, NavigationContainer as _NavigationContainer} from '@react-navigation/native';
 
-import {selectDark} from '@/store/themeSlice';
-import {useAppSelector} from '@/hooks/store';
+import {useAppDispatch, useAppSelector} from '@/hooks/store';
+import {fetchTheme} from '@/store/themeSlice';
 
 export function NavigationContainer({children}: {children: React.ReactNode}): JSX.Element {
-  const dark = useAppSelector(selectDark);
+  const dispatch = useAppDispatch();
+  const color = useAppSelector(state => state.theme.theme);
+  const [theme, setTheme] = useState(DefaultTheme);
 
-  return <_NavigationContainer theme={dark ? DarkTheme : DefaultTheme}>{children}</_NavigationContainer>;
+  useEffect(() => {
+    dispatch(fetchTheme());
+  }, []);
+
+  useEffect(() => {
+    const customTheme = {
+      ...DefaultTheme,
+      colors: {
+        ...DefaultTheme.colors,
+        primary: color,
+      },
+    };
+    setTheme(customTheme);
+  }, [color]);
+
+  return <_NavigationContainer theme={theme}>{children}</_NavigationContainer>;
 }
