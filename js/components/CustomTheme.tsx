@@ -5,7 +5,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 import {toggleTheme} from '@/store/themeSlice';
 import {useAppDispatch, useAppSelector} from '@/hooks/store';
-import {ThemeFlags, ThemeFlagsKey, ThemeFlagsKeys} from '@/dao/ThemeDao';
+import {ThemeFlags, ThemeFlagsKey, ThemeFlagsKeys, setThemeFlag} from '@/dao/ThemeDao';
 import {splitCamelCase} from '@/utils/string';
 
 interface Props {
@@ -19,6 +19,7 @@ export function CustomTheme({visible, onClose}: Props) {
 
   function onSelectTheme(theme: ThemeFlags) {
     dispatch(toggleTheme(theme));
+    setThemeFlag(theme);
   }
 
   function LabelItem({item: key}: {item: ThemeFlagsKey}) {
