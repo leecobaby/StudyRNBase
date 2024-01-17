@@ -7,7 +7,6 @@ export enum ThemeFlags {
   Purple = '#9C27B0',
   DeepPurple = '#673AB7',
   Indigo = '#3F51B5',
-  Blue = '#2196F3',
   LightBlue = '#03A9F4',
   Cyan = '#00BCD4',
   Green = '#4CAF50',
