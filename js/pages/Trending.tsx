@@ -1,20 +1,22 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, RefreshControl, TouchableOpacity} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import {useToast} from 'react-native-toast-notifications';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useFocusEffect, useNavigation, useTheme} from '@react-navigation/native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {View, Text, StyleSheet, RefreshControl, TouchableOpacity} from 'react-native';
 
-import {useAppDispatch, useAppSelector} from '@/hooks/store';
-import {NavigationBar} from '@/components/NavigationBar';
-import {TrendingItem} from '@/components/TrendingItem';
-import {TrendingDialog} from '@/components/TrendingDialog';
-import {fetchTrendingData, selectTrending} from '@/store/trendingSlice';
-import {ScreenProps} from '@/navigators/type';
 import {Flag} from '@/types/enum';
-import {fetchLangData} from '@/store/langSlice';
 import {FlagLang} from '@/dao/LanguageDao';
+import {ScreenProps} from '@/navigators/type';
+import {genTrendingFetchUrl} from '@/utils/url';
+import {fetchLangData} from '@/store/langSlice';
+import {TrendingItem} from '@/components/TrendingItem';
+import {NavigationBar} from '@/components/NavigationBar';
+import {TrendingDialog} from '@/components/TrendingDialog';
+import {useAppDispatch, useAppSelector} from '@/hooks/store';
+import {fetchTrendingData, selectTrending} from '@/store/trendingSlice';
+
 export type TimeSpan = {
   title: string;
   value: string;
@@ -27,9 +29,6 @@ export const timespans: TimeSpan[] = [
 
 type Props = ScreenProps<'TrendingPage'>;
 type NavigationProp = Props['navigation'];
-
-const URL = 'https://github.com/trending';
-const THEME_COLOR = '#a67';
 
 export const TrendingPage: React.FC = () => {
   const {colors} = useTheme();
@@ -111,7 +110,7 @@ export const TrendingTabPage: React.FC<{route: any; timespan: TimeSpan}> = ({rou
   const trendingData = trending[route.name];
   const allItems = trendingData?.items;
   const key = route.name || '';
-  const url = genFetchUrl(key, timespan.value);
+  const url = genTrendingFetchUrl(key, timespan.value);
   const [pageIndex, setPageIndex] = useState(1);
   const [items, setItems] = useState(allItems?.slice(0, pageIndex * pageSizes));
   const flag = Flag.trending;
@@ -196,11 +195,7 @@ export const TrendingTabPage: React.FC<{route: any; timespan: TimeSpan}> = ({rou
   );
 };
 
-function genFetchUrl(key: string, timespan: string) {
-  const path = key === 'All' ? '' : '/' + key;
-  return URL + path + '?since=' + timespan;
-}
-
+const THEME_COLOR = '#a67';
 const styles = StyleSheet.create({
   container: {
     flex: 1,

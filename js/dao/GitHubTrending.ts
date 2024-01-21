@@ -6,6 +6,9 @@ const FILTER_URLS = [
 ];
 const URL = 'https://api.devio.org/as/trending?sourceUrl=';
 
+export const controller = new AbortController();
+const signal = controller.signal;
+
 export class GitHubTrending {
   private authToken: string;
 
@@ -17,7 +20,7 @@ export class GitHubTrending {
     url = this.filterUrl(url);
     url = `${URL}${url}`;
     return new Promise((resolve, reject) => {
-      fetch(url, {headers: {'auth-token': this.authToken}})
+      fetch(url, {headers: {'auth-token': this.authToken}, signal})
         .then(response => {
           return response.json();
         })

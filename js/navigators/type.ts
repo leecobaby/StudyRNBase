@@ -29,6 +29,7 @@ export type RootStackParamList = {
   AboutMePage: undefined;
   CustomKeyPage: {flagLang: FlagLang; isRemoveKey: boolean};
   SortKeyPage: {flagLang: FlagLang};
+  SearchPage: undefined;
 };
 
 export type RootStackKey = keyof RootStackParamList;

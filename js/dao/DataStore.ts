@@ -7,6 +7,9 @@ export interface CachedData<T> {
   timestamp: number;
 }
 
+export const controller = new AbortController();
+const signal = controller.signal;
+
 async function saveCachedData<T>(url: string, data: T): Promise<void> {
   try {
     const cachedData: CachedData<T> = {
@@ -31,10 +34,14 @@ async function fetchCachedData<T>(url: string): Promise<CachedData<T> | null> {
 }
 
 async function fetchNetData<T>(url: string): Promise<T> {
-  const response = await fetch(url);
+  const response = await fetch(url, {signal});
   if (response.ok) {
     const data = (await response.json()) as T;
     return data;
+  }
+  if (response.statusText === 'AbortError') {
+    console.log('Fetch aborted');
+    return {} as T;
   }
   throw new Error('Network response was not ok.');
 }

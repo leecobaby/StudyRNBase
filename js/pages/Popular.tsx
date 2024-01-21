@@ -1,24 +1,22 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, RefreshControl} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import {useToast} from 'react-native-toast-notifications';
+import {View, Text, StyleSheet, RefreshControl} from 'react-native';
 import {useFocusEffect, useNavigation, useTheme} from '@react-navigation/native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 
+import {Flag} from '@/types/enum';
+import {FlagLang} from '@/dao/LanguageDao';
+import {ScreenProps} from '@/navigators/type';
+import {genPopularFetchUrl} from '@/utils/url';
+import {fetchLangData} from '@/store/langSlice';
 import {PopularItem} from '@/components/PopularItem';
 import {NavigationBar} from '@/components/NavigationBar';
 import {useAppDispatch, useAppSelector} from '@/hooks/store';
 import {fetchPopularData, selectPopular} from '@/store/popularSlice';
-import {ScreenProps} from '@/navigators/type';
-import {Flag} from '@/types/enum';
-import {fetchLangData} from '@/store/langSlice';
-import {FlagLang} from '@/dao/LanguageDao';
 
 type Props = ScreenProps<'PopularPage'>;
 type NavigationProp = Props['navigation'];
-
-const URL = 'https://api.github.com/search/repositories?q=';
-const QUERY_STR = '&sort=stars';
 
 export const PopularPage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -88,7 +86,7 @@ export const PopularTabPage: React.FC<{route: any}> = ({route}) => {
   const popularData = popular[route.name];
   const allItems = popularData?.items;
   const key = route.name || '';
-  const url = genFetchUrl(key);
+  const url = genPopularFetchUrl(key);
   const [pageIndex, setPageIndex] = useState(1);
   const [items, setItems] = useState(allItems?.slice(0, pageIndex * pageSizes));
   const flag = Flag.popular;
@@ -174,10 +172,6 @@ export const PopularTabPage: React.FC<{route: any}> = ({route}) => {
     </View>
   );
 };
-
-function genFetchUrl(key: string) {
-  return URL + encodeURIComponent(key) + QUERY_STR;
-}
 
 const styles = StyleSheet.create({
   container: {

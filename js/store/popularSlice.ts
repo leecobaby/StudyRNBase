@@ -59,6 +59,7 @@ const popularSlice = createSlice({
         const key = action.meta.arg.key;
         state[key] = state[key] || {};
         state[key].loading = false;
+        if (!action.payload) return;
         state[key].items = action.payload;
       })
       .addCase(fetchPopularData.rejected, (state, action) => {
@@ -76,6 +77,7 @@ export const fetchPopularData = createAsyncThunk<PopularItemType[], {url: string
     return fetchData<GitHubSearchResult>(arg.url)
       .then(res => {
         if (!res) throw new Error('responseData is null');
+        if (!res.data.items) return null;
         return wrapFavorite(res.data.items, flag);
       })
       .catch((error: any) => {
