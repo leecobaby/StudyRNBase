@@ -1,8 +1,7 @@
+import {GlobalStyles} from '@/GlobalStyles';
 import React from 'react';
 import {Platform, StatusBar, StyleSheet, Text, View, ViewProps} from 'react-native';
 
-const NAV_BAR_HEIGHT_IOS = 44;
-const NAV_BAR_HEIGHT_ANDROID = 50;
 const STATUS_BAR_HEIGHT = 20;
 
 type StatusBarProps = {
@@ -88,7 +87,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    height: Platform.OS === 'ios' ? NAV_BAR_HEIGHT_IOS : NAV_BAR_HEIGHT_ANDROID,
+    height: Platform.OS === 'ios' ? GlobalStyles.nav_bar_height_ios : GlobalStyles.nav_bar_height_android,
   },
   navBarTitleContainer: {
     alignItems: 'center',

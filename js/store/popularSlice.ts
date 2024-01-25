@@ -42,6 +42,7 @@ const popularSlice = createSlice({
       const {index, item} = action.payload;
       const key = action.payload.key;
       const isFavorite = !item.isFavorite;
+      if (!state[key].items) return;
       state[key].items![index] = {
         ...item,
         isFavorite,

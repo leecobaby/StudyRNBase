@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {FlatList} from 'react-native-gesture-handler';
 import {useToast} from 'react-native-toast-notifications';
-import {View, Text, StyleSheet, RefreshControl} from 'react-native';
+import {View, Text, StyleSheet, RefreshControl, TouchableOpacity} from 'react-native';
 import {useFocusEffect, useNavigation, useTheme} from '@react-navigation/native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 
@@ -18,7 +18,7 @@ import {fetchPopularData, selectPopular} from '@/store/popularSlice';
 type Props = ScreenProps<'PopularPage'>;
 type NavigationProp = Props['navigation'];
 
-export const PopularPage: React.FC = () => {
+export const PopularPage: React.FC<Props> = ({navigation}) => {
   const dispatch = useAppDispatch();
   const {colors} = useTheme();
   const keys = useAppSelector(state => state.lang.popular);
@@ -38,9 +38,11 @@ export const PopularPage: React.FC = () => {
         statusBar={{backgroundColor: colors.primary}}
         style={{backgroundColor: colors.primary}}
         rightButton={
-          <View style={{padding: 5, marginRight: 8}}>
-            <Text style={{color: 'white'}}>搜索</Text>
-          </View>
+          <TouchableOpacity onPress={() => navigation.navigate('SearchPage')}>
+            <View style={{padding: 5, marginRight: 8}}>
+              <Text style={{color: 'white'}}>搜索</Text>
+            </View>
+          </TouchableOpacity>
         }
         leftButton={
           <View style={{padding: 5, marginRight: 8}}>

@@ -1,8 +1,7 @@
 import Octicons from 'react-native-vector-icons/Octicons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import Foundation from 'react-native-vector-icons/Foundation';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export const MORE_MENU = {
   Custom_Language: {name: '自定义标签', Icons: MaterialCommunityIcons, icon: 'checkbox-marked-outline'},
