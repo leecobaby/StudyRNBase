@@ -10,6 +10,7 @@ import {FlagLang, LanguageDao} from '@/dao/LanguageDao';
 import {NavigationBar} from '@/components/NavigationBar';
 import {LeftBackButton} from '@/components/LeftBackButton';
 import {useAppDispatch, useAppSelector} from '@/hooks/store';
+import {useBackHandler} from '@/hooks/use-backhandler';
 
 type Props = ScreenProps<'SortKeyPage'>;
 export function SortKeyPage({route, navigation}: Props) {
@@ -27,10 +28,11 @@ export function SortKeyPage({route, navigation}: Props) {
     loadData();
   }, []);
 
+  useBackHandler(onBack);
   function onBack() {
     if (isEqualForLang(initLanguages, languages)) {
       navigation.goBack();
-      return;
+      return true;
     }
     Alert.alert('提示', '要保存修改吗？', [
       {
@@ -43,6 +45,7 @@ export function SortKeyPage({route, navigation}: Props) {
         onPress: () => onSave(),
       },
     ]);
+    return true;
   }
 
   async function onSave() {

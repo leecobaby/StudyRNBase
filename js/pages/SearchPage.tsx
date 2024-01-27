@@ -2,15 +2,26 @@ import React, {useEffect, useState} from 'react';
 import {useTheme} from '@react-navigation/native';
 import {FlatList} from 'react-native-gesture-handler';
 import {useToast} from 'react-native-toast-notifications';
-import {View, Text, StyleSheet, RefreshControl, TextInput, TouchableOpacity, Keyboard} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  RefreshControl,
+  TextInput,
+  TouchableOpacity,
+  Keyboard,
+  ActivityIndicator,
+} from 'react-native';
 
 import {Flag} from '@/types/enum';
+import {abortFetch} from '@/dao/DataStore';
 import {ScreenProps} from '@/navigators/type';
 import {genPopularFetchUrl} from '@/utils/url';
 import {fetchLangData} from '@/store/langSlice';
 import {searchPopularData} from '@/dao/SearchDao';
 import {PopularItem} from '@/components/PopularItem';
 import {PopularItemType} from '@/store/popularSlice';
+import {useBackHandler} from '@/hooks/use-backhandler';
 import {FlagLang, LanguageDao} from '@/dao/LanguageDao';
 import {NavigationBar} from '@/components/NavigationBar';
 import {LeftBackButton} from '@/components/LeftBackButton';
@@ -31,21 +42,40 @@ export const SearchPage: React.FC<Props> = ({navigation}) => {
   const [allItems, setAllItems] = useState<PopularItemType[] | null>(null);
   const [pageIndex, setPageIndex] = useState(1);
   const [items, setItems] = useState(allItems?.slice(0, pageIndex * pageSizes));
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
   const flag = Flag.popular;
 
   function loadData() {
     Keyboard.dismiss();
-    setIsPending(true);
-    searchPopularData(url).then(data => {
-      setAllItems(data);
+    if (isPending) {
+      abortFetch(url);
       setIsPending(false);
-    });
+      return;
+    }
+    setIsPending(true);
+    searchPopularData(url)
+      .then(data => {
+        setAllItems(data);
+        setIsPending(false);
+      })
+      .catch(err => {
+        if (err.message.indexOf('AbortError') !== -1) {
+          toast.show('已取消搜索', {
+            duration: 1000,
+            placement: 'center',
+            animationType: 'zoom-in',
+          });
+        }
+        setIsPending(false);
+      });
   }
 
   function loadMore() {
     if (!allItems) return;
     if (allItems.length > pageIndex * pageSizes) {
+      setIsLoadingMore(true);
       setItems(allItems?.slice(0, pageIndex * pageSizes));
+      setIsLoadingMore(false);
     } else {
       toast.show('没有更多数据了', {
         duration: 1000,
@@ -67,9 +97,11 @@ export const SearchPage: React.FC<Props> = ({navigation}) => {
     setPageIndex(pageIndex + 1);
   };
 
+  useBackHandler(onBack);
   function onBack() {
     Keyboard.dismiss();
     navigation.goBack();
+    return true;
   }
 
   async function saveKey() {
@@ -83,9 +115,13 @@ export const SearchPage: React.FC<Props> = ({navigation}) => {
       return;
     }
     const languages = keys.concat([{name: key, path: key, checked: true}]);
-
     await LanguageDao.save(FlagLang.Popular, languages);
     dispatch(fetchLangData({flagLang: FlagLang.Popular}));
+    toast.show('保存成功', {
+      duration: 1000,
+      placement: 'center',
+      animationType: 'zoom-in',
+    });
   }
 
   function reanderItem(item: any, index: number) {
@@ -110,6 +146,15 @@ export const SearchPage: React.FC<Props> = ({navigation}) => {
         </View>
       </TouchableOpacity>
     );
+  }
+
+  function LoadingMore() {
+    return isLoadingMore ? (
+      <View style={styles.indicatorContainer}>
+        <ActivityIndicator style={styles.indicator} />
+        <Text>正在加载更多</Text>
+      </View>
+    ) : null;
   }
 
   return (
@@ -143,6 +188,7 @@ export const SearchPage: React.FC<Props> = ({navigation}) => {
               onRefresh={() => loadData()}
             />
           }
+          ListFooterComponent={() => <LoadingMore />}
           onEndReached={handleEndReached}
           onEndReachedThreshold={0.1}
         />
@@ -221,5 +267,13 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.4,
     shadowRadius: 1,
     elevation: 2,
+  },
+  indicatorContainer: {
+    marginBottom: 60,
+    alignItems: 'center',
+  },
+  indicator: {
+    color: 'red',
+    margin: 10,
   },
 });

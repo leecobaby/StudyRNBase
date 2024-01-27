@@ -6,9 +6,7 @@ export interface CachedData<T> {
   data: T;
   timestamp: number;
 }
-
-export const controller = new AbortController();
-const signal = controller.signal;
+const controllers = new Map<string, AbortController>();
 
 async function saveCachedData<T>(url: string, data: T): Promise<void> {
   try {
@@ -34,16 +32,23 @@ async function fetchCachedData<T>(url: string): Promise<CachedData<T> | null> {
 }
 
 async function fetchNetData<T>(url: string): Promise<T> {
-  const response = await fetch(url, {signal});
-  if (response.ok) {
-    const data = (await response.json()) as T;
-    return data;
+  const controller = new AbortController();
+  controllers.set(url, controller);
+  const signal = controller.signal;
+
+  try {
+    const response = await fetch(url, {signal});
+    if (response.ok) {
+      const data = (await response.json()) as T;
+      return data;
+    }
+    throw new Error('Network response was not ok.');
+  } catch (error) {
+    console.log(`Failed to fetch data for ${url}: ${error}`);
+    throw error;
+  } finally {
+    controllers.delete(url);
   }
-  if (response.statusText === 'AbortError') {
-    console.log('Fetch aborted');
-    return {} as T;
-  }
-  throw new Error('Network response was not ok.');
 }
 
 export async function fetchData<T>(url: string): Promise<CachedData<T>> {
@@ -64,5 +69,12 @@ export async function fetchData<T>(url: string): Promise<CachedData<T>> {
     throw new Error(`Failed to fetch data for ${url}`);
   } catch (error) {
     throw error;
+  }
+}
+
+export function abortFetch(url: string): void {
+  const controller = controllers.get(url);
+  if (controller) {
+    controller.abort();
   }
 }
